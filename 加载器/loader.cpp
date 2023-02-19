@@ -6,7 +6,7 @@ DLL void* init(void* self);
 DLL void* event(void* param);
 DLL void* compute(void* null);
 DLL void* draw(void* null);
-DLL void* sleep(void* null);
+//DLL void* sleep(void* null);
 
 void ened();
 void event_Key(sf::Event::KeyEvent key);
@@ -19,11 +19,14 @@ sf::RenderTexture* texture;
 
 DLL void* init(void* self)
 {
+	printf("loader::init\n");
+
 	::self = (Interface*)self;
 	texture = &::self->get_Texture();
 
 	texture->create(1920, 1080);
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
+	texture->clear(sf::Color(0x99FFFFFF));
 
 	return nullptr;
 }
@@ -40,7 +43,7 @@ DLL void* event(void* param)
 		ened();
 		break;
 	}
-	case Event::KeyReleased:
+	case Event::KeyPressed:
 	{
 		event_Key(event.key);
 		break;
@@ -64,16 +67,18 @@ DLL void* draw(void* null)
 	return nullptr;
 }
 
-DLL void* sleep(void* null)
-{
-	sf::sleep(sf::milliseconds(16));
-	return nullptr;
-}
+//DLL void* sleep(void* null)
+//{
+//	sf::sleep(sf::milliseconds(16));
+//	return nullptr;
+//}
 
 void ened()
 {
 	self->set_Running(false);
 	self->set_Next_Dll(nullptr);
+
+	printf("loader::ened\n");
 }
 
 void event_Key(sf::Event::KeyEvent key)

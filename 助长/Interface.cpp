@@ -189,12 +189,15 @@ bool Interface::load(const char path[])
 
 		return true ;
 	}
+	
+	printf("Interface::load:加载%s:", path);
 
 	self_Dll = LoadLibraryA(path); //勿用'/'，要用'\\'
-	
+
 	if (self_Dll == nullptr) //加载失败
 	{
 		self_Is_Running = false;
+		printf("失败\n");
 		return false;
 	}
 
@@ -205,6 +208,7 @@ bool Interface::load(const char path[])
 	set_Sleep((Function)GetProcAddress((HMODULE)self_Dll, "sleep"));
 
 	self_Is_Running = true;
+	printf("成功\n");
 
 	return true;
 }

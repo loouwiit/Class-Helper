@@ -1,7 +1,8 @@
 //助长
 
 /*
-* 0.0.0.1基本的加载逻辑
+* 0.0.0.1 基本的加载逻辑
+* 0.0.0.2 渲染loader的画面
 */
 
 #include "Interface.h"
@@ -23,7 +24,6 @@ constexpr wchar_t window_Name[] = L"助长";
 sf::RenderWindow window;
 sf::View view;
 sf::Font font;
-sf::Event _event;
 Interface menu;
 
 int MAIN;
@@ -39,6 +39,7 @@ int MAIN
 	init();
 	while (window.isOpen())
 	{
+		static sf::Event _event;
 		while (window.pollEvent(_event)) event(_event);
 		compute();
 		draw();
@@ -86,7 +87,7 @@ void event(sf::Event event)
 	}
 	}
 
-	menu.event(_event); //将事件发送给dll，如无需发送请在swtich中直接return
+	menu.event(event); //将事件发送给dll，如无需发送请在swtich中直接return
 }
 
 void compute()
@@ -99,6 +100,7 @@ void compute()
 		if (menu.get_Next_Dll() == nullptr)
 		{
 			//没有下一个Dll
+			printf("main::compute:未指定下一个dll，程序将退出\n");
 			window.close();
 			menu.load(nullptr);
 		}
@@ -119,9 +121,9 @@ void draw()
 	static sf::Sprite fream;
 	menu.draw();
 	fream.setTexture(menu.get_Texture().getTexture());
-	//window.clear();
-	//window.draw(fream);
-	//window.display();
+	window.clear();
+	window.draw(fream);
+	window.display();
 }
 
 void draw_Loading()
