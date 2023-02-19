@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class Button
+class Botton
 {
 public:
 	virtual void set_Hight_Light(bool flag);
@@ -12,12 +12,12 @@ private:
 	bool self_High_Light = false;
 };
 
-class Botton_Text : public Button
+class Botton_Text : public Botton
 {
 
 };
 
-class Botton_Texture : public Button
+class Botton_Texture : public Botton
 {
 
 };
