@@ -21,7 +21,7 @@
     <ClCompile Include="Interface.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Button.cpp">
+    <ClCompile Include="Botton.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,7 +29,7 @@
     <ClInclude Include="Interface.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Button.h">
+    <ClInclude Include="Botton.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
