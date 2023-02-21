@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 class Interface;
+class Interface_Dll;
 
 void* NULL_Function(void* param);
 void* default_Sleep(void* null);
@@ -34,14 +35,6 @@ public:
 
 	sf::RenderTexture& get_Texture();
 
-	void set_Next_Dll(const char path[]);
-	const char* get_Next_Dll();
-	
-	bool is_Running();
-	void set_Running(bool flag);
-
-	bool load(const char path[]);
-
 private:
 	Function self_Init = NULL_Function;
 	Function self_Event = NULL_Function;
@@ -50,6 +43,23 @@ private:
 	Function self_Sleep = default_Sleep;
 
 	sf::RenderTexture self_Texture;
+};
+
+class Interface_Dll : public Interface
+{
+public:
+	Interface_Dll();
+	~Interface_Dll();
+
+	void set_Next_Dll(const char path[]);
+	const char* get_Next_Dll();
+
+	bool load(const char path[]);
+
+	bool is_Running();
+	void set_Running(bool flag);
+
+private:
 	void* self_Dll = nullptr;
 	bool self_Is_Running = true;
 	char* self_Next_Dll = nullptr;

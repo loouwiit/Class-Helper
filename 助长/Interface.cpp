@@ -21,31 +21,11 @@ Interface::Interface()
 	self_Compute = NULL_Function;
 	self_Draw = NULL_Function;
 	self_Sleep = default_Sleep;
-
-	if (self_Dll != nullptr) FreeLibrary((HMODULE)self_Dll);
-	self_Dll = nullptr;
-
-	self_Is_Running = true;
-
-	if (self_Next_Dll != nullptr)
-	{
-		delete[] self_Next_Dll;
-		self_Next_Dll = nullptr;
-	}
 }
 
 Interface::~Interface()
 {
-	if (self_Dll != nullptr) FreeLibrary((HMODULE)self_Dll);
-	self_Dll = nullptr;
 
-	self_Is_Running = false;
-
-	if (self_Next_Dll != nullptr)
-	{
-		delete[] self_Next_Dll;
-		self_Next_Dll = nullptr;
-	}
 }
 
 void Interface::set_Init(Function init_Function)
@@ -133,7 +113,35 @@ sf::RenderTexture& Interface::get_Texture()
 	return self_Texture;
 }
 
-void Interface::set_Next_Dll(const char path[])
+Interface_Dll::Interface_Dll()
+{
+	if (self_Dll != nullptr) FreeLibrary((HMODULE)self_Dll);
+	self_Dll = nullptr;
+
+	self_Is_Running = true;
+
+	if (self_Next_Dll != nullptr)
+	{
+		delete[] self_Next_Dll;
+		self_Next_Dll = nullptr;
+	}
+}
+
+Interface_Dll::~Interface_Dll()
+{
+	if (self_Dll != nullptr) FreeLibrary((HMODULE)self_Dll);
+	self_Dll = nullptr;
+
+	self_Is_Running = false;
+
+	if (self_Next_Dll != nullptr)
+	{
+		delete[] self_Next_Dll;
+		self_Next_Dll = nullptr;
+	}
+}
+
+void Interface_Dll::set_Next_Dll(const char path[])
 {
 	if (path == nullptr)
 	{
@@ -156,22 +164,22 @@ void Interface::set_Next_Dll(const char path[])
 	strcpy_s(self_Next_Dll, size, path);
 }
 
-const char* Interface::get_Next_Dll()
+const char* Interface_Dll::get_Next_Dll()
 {
 	return self_Next_Dll;
 }
 
-bool Interface::is_Running()
+bool Interface_Dll::is_Running()
 {
 	return self_Is_Running;
 }
 
-void Interface::set_Running(bool flag)
+void Interface_Dll::set_Running(bool flag)
 {
 	self_Is_Running = flag;
 }
 
-bool Interface::load(const char path[])
+bool Interface_Dll::load(const char path[])
 {
 	if (self_Dll != nullptr) FreeLibrary((HMODULE)self_Dll);
 	self_Dll = nullptr;

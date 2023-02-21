@@ -16,7 +16,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse);
 using Function = Interface::Function;
 
 sf::Font font;
-Interface* self = nullptr;
+Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
 Botton_Text text;
 sf::Color background_Color = sf::Color(0x99FFFFFF);
@@ -25,7 +25,7 @@ DLL void* init(void* self)
 {
 	printf("loader::init\n");
 
-	::self = (Interface*)self;
+	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
 	texture->create(1920, 1080);

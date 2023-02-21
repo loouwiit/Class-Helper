@@ -3,6 +3,7 @@
 /*
 * 0.0.0.1 基本的加载逻辑
 * 0.0.0.2 渲染loader的画面
+* 0.0.0.3 分离Interface与dll加载
 */
 
 #include "Interface.h"
@@ -25,7 +26,7 @@ sf::RenderWindow window;
 sf::View view;
 sf::Sprite fream;
 sf::Font font;
-Interface menu;
+Interface_Dll menu;
 
 int MAIN;
 void init();
