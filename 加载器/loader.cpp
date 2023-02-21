@@ -18,7 +18,8 @@ using Function = Interface::Function;
 sf::Font font;
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
-Botton_Text text;
+Button_Text text;
+Button_Texture image;
 sf::Color background_Color = sf::Color(0x99FFFFFF);
 
 DLL void* init(void* self)
@@ -37,9 +38,13 @@ DLL void* init(void* self)
 	text.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text.get_Text().setPosition(1920 / 2, 1080 / 2);
 	text.get_Text().setOrigin(text.get_Text().getGlobalBounds().width / 2, text.get_Text().getGlobalBounds().height / 2);
-	text.set_Rect();
+	text.init();
 	text.set_Default_Color(sf::Color(0x0));
 	text.set_Height_Light_Color(sf::Color(0x33333366));
+
+	image.set_Texture(".\\resources\\test.png");
+	image.set_Postion({ 0, 0 });
+	image.init();
 
 	return nullptr;
 }
@@ -83,6 +88,7 @@ DLL void* draw(void* null)
 {
 	texture->clear(background_Color);
 	texture->draw(text);
+	texture->draw(image);
 	return nullptr;
 }
 
@@ -119,6 +125,6 @@ void event_Key(sf::Event::KeyEvent key)
 
 void event_Mouse(sf::Event::MouseMoveEvent mouse)
 {
-	text.set_Hight_Light(text.is_Cilcked({ (float)mouse.x,(float)mouse.y }));
+	text.set_Hight_Light(text.is_Clicked({ (float)mouse.x,(float)mouse.y }));
 	//printf("loader::event_Mouse:(%d,%d):hight_Light=%d\n", mouse.x, mouse.y, text.get_Hight_Light());
 }

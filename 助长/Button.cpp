@@ -10,24 +10,23 @@ bool Button::get_Hight_Light()
 	return self_High_Light;
 }
 
-void Botton_Text::set_Hight_Light(bool flag)
+void Button::set_Height_Light_Color(sf::Color color)
+{
+	self_Height_Light_Color = color;
+}
+
+void Button::set_Default_Color(sf::Color color)
+{
+	self_Default_Color = color;
+}
+
+void Button_Text::set_Hight_Light(bool flag)
 {
 	self_High_Light = flag;
 	set_Rectangle_Color();
 }
 
-void Botton_Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw(self_Rectangle);
-	target.draw(self_Text);
-}
-
-bool Botton_Text::is_Cilcked(sf::Vector2f position)
-{
-	return self_Rectangle.getGlobalBounds().contains(position);
-}
-
-void Botton_Text::set_Rect()
+void Button_Text::init()
 {
 	sf::FloatRect rect;
 	rect = self_Text.getGlobalBounds();
@@ -35,25 +34,63 @@ void Botton_Text::set_Rect()
 	self_Rectangle.setSize({ rect.width,rect.height });
 }
 
-void Botton_Text::set_Height_Light_Color(sf::Color color)
+void Button_Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	self_Height_Light_Color = color;
+	target.draw(self_Rectangle);
+	target.draw(self_Text);
 }
 
-void Botton_Text::set_Default_Color(sf::Color color)
+bool Button_Text::is_Clicked(sf::Vector2f position)
 {
-	self_Default_Color = color;
+	return self_Rectangle.getGlobalBounds().contains(position);
 }
 
-sf::Text& Botton_Text::get_Text()
+sf::Text& Button_Text::get_Text()
 {
 	return self_Text;
 }
 
-void Botton_Text::set_Rectangle_Color()
+void Button_Text::set_Rectangle_Color()
 {
 	if (self_High_Light)
 		self_Rectangle.setFillColor(self_Height_Light_Color);
 	else
 		self_Rectangle.setFillColor(self_Default_Color);
+}
+
+//sf::Texture& Button_Texture::get_Texture()
+//{
+//	return self_Texture;
+//}
+
+void Button_Texture::set_Texture(sf::Texture texture)
+{
+	self_Texture = texture;
+	self_Sprite.setTexture(self_Texture);
+}
+
+void Button_Texture::set_Texture(const char path[])
+{
+	self_Texture.loadFromFile(path);
+	self_Sprite.setTexture(self_Texture);
+}
+
+void Button_Texture::set_Postion(sf::Vector2f position)
+{
+	self_Sprite.setPosition(position);
+}
+
+void Button_Texture::init()
+{
+	return;
+}
+
+void Button_Texture::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	target.draw(self_Sprite);
+}
+
+bool Button_Texture::is_Clicked(sf::Vector2f position)
+{
+	return self_Sprite.getGlobalBounds().contains(position);
 }
