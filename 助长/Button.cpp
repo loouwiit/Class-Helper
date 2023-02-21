@@ -1,11 +1,11 @@
-#include "Botton.h"
+#include "Button.h"
 
-void Botton::set_Hight_Light(bool flag)
+void Button::set_Hight_Light(bool flag)
 {
 	self_High_Light = flag;
 }
 
-bool Botton::get_Hight_Light()
+bool Button::get_Hight_Light()
 {
 	return self_High_Light;
 }

@@ -23,6 +23,7 @@ constexpr wchar_t window_Name[] = L"Öú³¤";
 
 sf::RenderWindow window;
 sf::View view;
+sf::Sprite fream;
 sf::Font font;
 Interface menu;
 
@@ -57,6 +58,9 @@ void init()
 	view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
 	window.setView(view);
 
+	fream.setScale(1, -1);
+	fream.setPosition(0, 1080);
+
 	draw_Loading();
 	
 	menu.load(".\\dll\\loader.dll");
@@ -80,6 +84,29 @@ void event(sf::Event event)
 		size.y += event.size.width / 16 * 9 / 2;
 		window.setSize(size);
 		return;
+	}
+	case Event::MouseMoved:
+	{
+		sf::Vector2f temp = window.mapPixelToCoords({ event.mouseMove.x, event.mouseMove.y });
+		event.mouseMove.x = (int)temp.x;
+		event.mouseMove.y = (int)temp.y;
+		break;
+	}
+	case Event::MouseButtonPressed:
+	case Event::MouseButtonReleased:
+	{
+		sf::Vector2f temp = window.mapPixelToCoords({ event.mouseButton.x, event.mouseButton.y });
+		event.mouseButton.x = (int)temp.x;
+		event.mouseButton.y = (int)temp.y;
+		break;
+	}
+	case Event::MouseWheelMoved:
+	case Event::MouseWheelScrolled:
+	{
+		sf::Vector2f temp = window.mapPixelToCoords({ event.mouseWheel.x, event.mouseWheel.y });
+		event.mouseWheel.x = (int)temp.x;
+		event.mouseWheel.y = (int)temp.y;
+		break;
 	}
 	default:
 	{
@@ -118,7 +145,6 @@ void compute()
 
 void draw()
 {
-	static sf::Sprite fream;
 	menu.draw();
 	fream.setTexture(menu.get_Texture().getTexture());
 	window.clear();

@@ -1,5 +1,5 @@
 #include "Interface.h"
-#include "Botton.h"
+#include "Button.h"
 
 #define DLL extern "C" __declspec(dllexport)
 
@@ -38,8 +38,8 @@ DLL void* init(void* self)
 	text.get_Text().setPosition(1920 / 2, 1080 / 2);
 	text.get_Text().setOrigin(text.get_Text().getGlobalBounds().width / 2, text.get_Text().getGlobalBounds().height / 2);
 	text.set_Rect();
-	text.set_Default_Color(sf::Color(0x000000FF));
-	text.set_Height_Light_Color(sf::Color(0x333333FF));
+	text.set_Default_Color(sf::Color(0x0));
+	text.set_Height_Light_Color(sf::Color(0x33333366));
 
 	return nullptr;
 }
@@ -120,5 +120,5 @@ void event_Key(sf::Event::KeyEvent key)
 void event_Mouse(sf::Event::MouseMoveEvent mouse)
 {
 	text.set_Hight_Light(text.is_Cilcked({ (float)mouse.x,(float)mouse.y }));
-	printf("loader::ebent_Mouse:hight_Light=%d", text.get_Hight_Light());
+	//printf("loader::event_Mouse:(%d,%d):hight_Light=%d\n", mouse.x, mouse.y, text.get_Hight_Light());
 }

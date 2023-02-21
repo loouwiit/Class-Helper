@@ -207,12 +207,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Botton.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Botton.h" />
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Interface.h" />
   </ItemGroup>
   <ItemGroup>

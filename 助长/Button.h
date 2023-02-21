@@ -1,7 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-class Botton : public sf::Drawable
+class Button : public sf::Drawable
 {
 public:
 	void set_Hight_Light(bool flag);
@@ -13,7 +13,7 @@ protected:
 	bool self_High_Light = false;
 };
 
-class Botton_Text : public Botton
+class Botton_Text : public Button
 {
 public:
 	void set_Hight_Light(bool flag);
@@ -33,7 +33,7 @@ private:
 	void set_Rectangle_Color();
 };
 
-class Botton_Texture : public Botton
+class Botton_Texture : public Button
 {
 
 };
