@@ -29,20 +29,18 @@ DLL void* init(void* self)
 	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
-	texture->create(1920, 1080);
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
-	texture->clear(background_Color);
 
 	text.get_Text().setFont(font);
 	text.get_Text().setString(L"test");
 	text.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text.get_Text().setPosition(1920 / 2, 1080 / 2);
+	text.get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
 	text.get_Text().setOrigin(text.get_Text().getGlobalBounds().width / 2, text.get_Text().getGlobalBounds().height / 2);
 	text.init();
 	text.set_Default_Color(sf::Color(0x0));
 	text.set_High_Light_Color(sf::Color(0x33333366));
 
-	image.set_Texture(".\\resources\\test.png");
+	image.set_Texture(".\\resources\\loader\\test.png");
 	image.set_Postion({ 50, 50 });
 	image.set_High_Light_Color(sf::Color(0xFFFFFF99));
 	image.init();
@@ -102,7 +100,6 @@ DLL void* draw(void* null)
 void ened()
 {
 	self->set_Running(false);
-	self->set_Next_Dll(nullptr);
 
 	printf("loader::ened\n");
 }
@@ -115,7 +112,15 @@ void event_Key(sf::Event::KeyEvent key)
 	{
 	case Key::Escape:
 	{
+		self->set_Next_Dll(nullptr);
 		ened();
+		break;
+	}
+	case Key::Space:
+	{
+		self->set_Next_Dll(".\\dll\\loader.dll");
+		ened();
+		break;
 	}
 	default:
 	{

@@ -21,6 +21,8 @@ Interface::Interface()
 	self_Compute = NULL_Function;
 	self_Draw = NULL_Function;
 	self_Sleep = default_Sleep;
+
+	self_Texture.create(1920, 1080);
 }
 
 Interface::~Interface()

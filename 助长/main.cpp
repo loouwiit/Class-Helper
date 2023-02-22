@@ -61,6 +61,7 @@ void init()
 
 	fream.setScale(1, -1);
 	fream.setPosition(0, 1080);
+	fream.setTexture(menu.get_Texture().getTexture());
 
 	draw_Loading();
 	
@@ -147,7 +148,6 @@ void compute()
 void draw()
 {
 	menu.draw();
-	fream.setTexture(menu.get_Texture().getTexture());
 	window.clear();
 	window.draw(fream);
 	window.display();
