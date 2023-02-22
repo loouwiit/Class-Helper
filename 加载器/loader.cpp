@@ -40,10 +40,11 @@ DLL void* init(void* self)
 	text.get_Text().setOrigin(text.get_Text().getGlobalBounds().width / 2, text.get_Text().getGlobalBounds().height / 2);
 	text.init();
 	text.set_Default_Color(sf::Color(0x0));
-	text.set_Height_Light_Color(sf::Color(0x33333366));
+	text.set_High_Light_Color(sf::Color(0x33333366));
 
 	image.set_Texture(".\\resources\\test.png");
-	image.set_Postion({ 0, 0 });
+	image.set_Postion({ 50, 50 });
+	image.set_High_Light_Color(sf::Color(0xFFFFFF99));
 	image.init();
 
 	return nullptr;
@@ -125,6 +126,7 @@ void event_Key(sf::Event::KeyEvent key)
 
 void event_Mouse(sf::Event::MouseMoveEvent mouse)
 {
-	text.set_Hight_Light(text.is_Clicked({ (float)mouse.x,(float)mouse.y }));
-	//printf("loader::event_Mouse:(%d,%d):hight_Light=%d\n", mouse.x, mouse.y, text.get_Hight_Light());
+	text.set_High_Light(text.is_Clicked({ (float)mouse.x,(float)mouse.y }));
+	image.set_High_Light(image.is_Clicked({ (float)mouse.x,(float)mouse.y }));
+	//printf("loader::event_Mouse:(%d,%d):%d\n", mouse.x, mouse.y, image.get_Hight_Light());
 }
