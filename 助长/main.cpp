@@ -148,7 +148,7 @@ void compute()
 void draw()
 {
 	menu.draw();
-	window.clear();
+	//window.clear();
 	window.draw(fream);
 	window.display();
 }
