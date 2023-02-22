@@ -12,6 +12,7 @@ DLL void* draw(void* null);
 void ened();
 void event_Key(sf::Event::KeyEvent key);
 void event_Mouse(sf::Event::MouseMoveEvent mouse);
+void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
 using Function = Interface::Function;
 
@@ -32,7 +33,7 @@ DLL void* init(void* self)
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
 
 	text.get_Text().setFont(font);
-	text.get_Text().setString(L"test");
+	text.get_Text().setString(L"¼ÓÔØseat.dll");
 	text.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text.get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
 	text.get_Text().setOrigin(text.get_Text().getGlobalBounds().width / 2, text.get_Text().getGlobalBounds().height / 2);
@@ -40,7 +41,7 @@ DLL void* init(void* self)
 	text.set_Default_Color(sf::Color(0x0));
 	text.set_High_Light_Color(sf::Color(0x33333366));
 
-	image.set_Texture(".\\resources\\loader\\test.png");
+	image.set_Texture(".\\resources\\test.png");
 	image.set_Postion({ 50, 50 });
 	image.set_High_Light_Color(sf::Color(0xFFFFFF99));
 	image.init();
@@ -69,6 +70,10 @@ DLL void* event(void* param)
 	{
 		event_Mouse(event.mouseMove);
 		break;
+	}
+	case Event::MouseButtonPressed:
+	{
+		event_Mouse(event.mouseButton);
 	}
 	default:
 	{
@@ -134,4 +139,13 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	text.set_High_Light(text.is_Clicked({ (float)mouse.x,(float)mouse.y }));
 	image.set_High_Light(image.is_Clicked({ (float)mouse.x,(float)mouse.y }));
 	//printf("loader::event_Mouse:(%d,%d):%d\n", mouse.x, mouse.y, image.get_Hight_Light());
+}
+
+void event_Mouse(sf::Event::MouseButtonEvent mouse)
+{
+	if (text.is_Clicked({ (float)mouse.x,(float)mouse.y }))
+	{
+		self->set_Next_Dll(".\\dll\\seat.dll");
+		ened();
+	}
 }
