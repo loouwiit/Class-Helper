@@ -32,6 +32,7 @@ void Button_Text::init()
 	rect = self_Text.getGlobalBounds();
 	self_Rectangle.setPosition(rect.left, rect.top);
 	self_Rectangle.setSize({ rect.width,rect.height });
+	set_Rectangle_Color();
 }
 
 void Button_Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
