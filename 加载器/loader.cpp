@@ -16,11 +16,12 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
 using Function = Interface::Function;
 
+constexpr int text_Nunber = 2;
+
 sf::Font font;
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
-Button_Text text;
-Button_Texture image;
+Button_Text text[text_Nunber];
 sf::Color background_Color = sf::Color(0x99FFFFFF);
 
 DLL void* init(void* self)
@@ -32,19 +33,23 @@ DLL void* init(void* self)
 
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
 
-	text.get_Text().setFont(font);
-	text.get_Text().setString(L"加载seat.dll");
-	text.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text.get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
-	text.get_Text().setOrigin(text.get_Text().getGlobalBounds().width / 2, text.get_Text().getGlobalBounds().height / 2);
-	text.init();
-	text.set_Default_Color(sf::Color(0x0));
-	text.set_High_Light_Color(sf::Color(0x33333366));
+	text[1].get_Text().setFont(font);
+	text[1].get_Text().setString(L"退出程序");
+	text[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text[1].get_Text().setPosition((float)(1920 - 50), (float)50);
+	text[1].get_Text().setOrigin(text[1].get_Text().getGlobalBounds().width, 0.0f); //右上对齐
+	text[1].init();
+	text[1].set_Default_Color(sf::Color(0x0));
+	text[1].set_High_Light_Color(sf::Color(0x33333366));
 
-	image.set_Texture(".\\resources\\test.png");
-	image.set_Postion({ 50, 50 });
-	image.set_High_Light_Color(sf::Color(0xFFFFFF99));
-	image.init();
+	text[0].get_Text().setFont(font);
+	text[0].get_Text().setString(L"加载seat.dll");
+	text[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text[0].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
+	text[0].get_Text().setOrigin(text[0].get_Text().getGlobalBounds().width / 2, text[0].get_Text().getGlobalBounds().height / 2);
+	text[0].init();
+	text[0].set_Default_Color(sf::Color(0x0));
+	text[0].set_High_Light_Color(sf::Color(0x33333366));
 
 	return nullptr;
 }
@@ -91,8 +96,8 @@ DLL void* compute(void* null)
 DLL void* draw(void* null)
 {
 	texture->clear(background_Color);
-	texture->draw(text);
-	texture->draw(image);
+	for (int i = 0; i < text_Nunber; i++)
+		texture->draw(text[i]);
 	return nullptr;
 }
 
@@ -136,16 +141,21 @@ void event_Key(sf::Event::KeyEvent key)
 
 void event_Mouse(sf::Event::MouseMoveEvent mouse)
 {
-	text.set_High_Light(text.is_Clicked({ (float)mouse.x,(float)mouse.y }));
-	image.set_High_Light(image.is_Clicked({ (float)mouse.x,(float)mouse.y }));
-	//printf("loader::event_Mouse:(%d,%d):%d\n", mouse.x, mouse.y, image.get_Hight_Light());
+	for (int i = 0; i < text_Nunber; i++)
+		text[i].set_High_Light(text[i].is_Clicked({ (float)mouse.x,(float)mouse.y }));
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
 {
-	if (text.is_Clicked({ (float)mouse.x,(float)mouse.y }))
+	if (text[0].is_Clicked({ (float)mouse.x,(float)mouse.y }))
 	{
 		self->set_Next_Dll(".\\dll\\seat.dll");
+		ened();
+	}
+
+	if (text[1].is_Clicked({ (float)mouse.x,(float)mouse.y }))
+	{
+		self->set_Next_Dll(nullptr);
 		ened();
 	}
 }
