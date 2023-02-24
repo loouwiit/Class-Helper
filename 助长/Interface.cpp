@@ -186,20 +186,19 @@ bool Interface_Dll::load(const char path[])
 	if (self_Dll != nullptr) FreeLibrary((HMODULE)self_Dll);
 	self_Dll = nullptr;
 
+	set_Init(nullptr);
+	set_Event(nullptr);
+	set_Compute(nullptr);
+	set_Draw(nullptr);
+	set_Sleep(nullptr);
+
 	if (path == nullptr)
 	{
-
-		set_Init(nullptr);
-		set_Event(nullptr);
-		set_Compute(nullptr);
-		set_Draw(nullptr);
-		set_Sleep(nullptr);
-
 		self_Is_Running = false;
 
-		return true ;
+		return true;
 	}
-	
+
 	printf("Interface::load:加载%s:", path);
 
 	self_Dll = LoadLibraryA(path); //勿用'/'，要用'\\'
