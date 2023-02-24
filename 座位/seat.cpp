@@ -41,13 +41,13 @@ DLL void* init(void* self)
 	text_Exit.get_Text().setString(L"退出seat.dll");
 	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text_Exit.get_Text().setPosition((float)(1920 - 50), (float)50);
-	text_Exit.get_Text().setOrigin(text_Exit.get_Text().getGlobalBounds().width, 0.0f); //右上对齐
+	text_Exit.set_Alignment(Button_Text::Alignment::Right | Button_Text::Alignment::Top); //右上对齐
 	text_Exit.init();
 	text_Exit.set_Default_Color(sf::Color(0x0));
 	text_Exit.set_High_Light_Color(sf::Color(0x33333366));
 
 	setlocale(LC_ALL, "chs");
-	seats_Load(".\\test.test哈哈哈刺激");
+	seats_Load(".\\resources\\seat\\seat-.txt");
 
 	return nullptr;
 }
@@ -188,7 +188,7 @@ void seats_Load(const char Path[])
 		seats[0].get_Text().setString(L"文件读取失败,路径:");
 		seats[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 		seats[0].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
-		seats[0].get_Text().setOrigin(seats[0].get_Text().getGlobalBounds().width / 2, seats[0].get_Text().getGlobalBounds().height); //上对齐
+		seats[0].set_Alignment(Button_Text::Alignment::Top); //上对齐
 		seats[0].init();
 		seats[0].set_Default_Color(sf::Color(0x0));
 		seats[0].set_High_Light_Color(sf::Color(0x33333366));
@@ -197,7 +197,7 @@ void seats_Load(const char Path[])
 		seats[1].get_Text().setString(buffer);
 		seats[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 		seats[1].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
-		seats[1].get_Text().setOrigin(seats[1].get_Text().getGlobalBounds().width / 2, 0.0f);//下对齐
+		seats[1].set_Alignment(Button_Text::Alignment::Botton); //下对齐
 		seats[1].init();
 		seats[1].set_Default_Color(sf::Color(0x0));
 		seats[1].set_High_Light_Color(sf::Color(0x33333366));

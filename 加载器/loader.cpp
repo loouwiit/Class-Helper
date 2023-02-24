@@ -37,19 +37,18 @@ DLL void* init(void* self)
 	text[1].get_Text().setString(L"退出程序");
 	text[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text[1].get_Text().setPosition((float)(1920 - 50), (float)50);
-	text[1].get_Text().setOrigin(text[1].get_Text().getGlobalBounds().width, 0.0f); //右上对齐
-	text[1].init();
+	text[1].set_Alignment(Button_Text::Alignment::Right | Button_Text::Alignment::Top); //右上对齐
 	text[1].set_Default_Color(sf::Color(0x0));
 	text[1].set_High_Light_Color(sf::Color(0x33333366));
+	text[1].init();
 
 	text[0].get_Text().setFont(font);
 	text[0].get_Text().setString(L"加载seat.dll");
 	text[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text[0].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
-	text[0].get_Text().setOrigin(text[0].get_Text().getGlobalBounds().width / 2, text[0].get_Text().getGlobalBounds().height / 2);
-	text[0].init();
 	text[0].set_Default_Color(sf::Color(0x0));
 	text[0].set_High_Light_Color(sf::Color(0x33333366));
+	text[0].init();
 
 	return nullptr;
 }

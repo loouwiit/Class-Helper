@@ -28,6 +28,8 @@ void Button_Text::set_High_Light(bool flag)
 
 void Button_Text::init()
 {
+	set_Rectangle_Alignment();
+
 	sf::FloatRect rect;
 	rect = self_Text.getGlobalBounds();
 	self_Rectangle.setPosition(rect.left, rect.top);
@@ -51,12 +53,32 @@ sf::Text& Button_Text::get_Text()
 	return self_Text;
 }
 
+void Button_Text::set_Alignment(Alignment alignment)
+{
+	self_Alignment_Flag = alignment;
+	set_Rectangle_Alignment();
+}
+
 void Button_Text::set_Rectangle_Color()
 {
 	if (self_High_Light)
 		self_Rectangle.setFillColor(self_High_Light_Color);
 	else
 		self_Rectangle.setFillColor(self_Default_Color);
+}
+
+void Button_Text::set_Rectangle_Alignment()
+{
+	sf::FloatRect rect = self_Text.getGlobalBounds();
+	sf::Vector2f origin{ 0,0 };
+
+	if (!(self_Alignment_Flag && Alignment::Horizontal)) origin.x = rect.width / 2;
+	else if (self_Alignment_Flag && Alignment::Right) origin.x = rect.width;
+
+	if (!(self_Alignment_Flag && Alignment::Vertical)) origin.y = rect.height / 2;
+	else if (self_Alignment_Flag && Alignment::Botton) origin.y = rect.height;
+
+	self_Text.setOrigin(origin.x, origin.y);
 }
 
 const sf::Texture& Button_Texture::get_Texture()
@@ -130,4 +152,19 @@ void Button_Texture::set_Sprite_Color()
 		self_Sprite.setColor(self_High_Light_Color);
 	else
 		self_Sprite.setColor(self_Default_Color);
+}
+
+Button_Text::Alignment operator|(Button_Text::Alignment a, Button_Text::Alignment b)
+{
+	return (Button_Text::Alignment)((char)a | (char)b);
+}
+
+Button_Text::Alignment operator&(Button_Text::Alignment a, Button_Text::Alignment b)
+{
+	return (Button_Text::Alignment)((char)a & (char)b);
+}
+
+bool operator&&(Button_Text::Alignment a, Button_Text::Alignment b)
+{
+	return (Button_Text::Alignment)((char)a & (char)b) != Button_Text::Alignment::Middle;
 }

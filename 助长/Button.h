@@ -23,19 +23,38 @@ protected:
 class Button_Text : public Button
 {
 public:
+	enum class Alignment : char;
+
 	sf::Text& get_Text();
+	void set_Alignment(Alignment alignment);
 
 	void set_High_Light(bool flag);
 	void init();
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	bool is_Clicked(sf::Vector2f position);
 
+	enum class Alignment : char
+	{
+		Middle = 0,
+
+		Left = 1 << 0,
+		Right = 1 << 1,
+		Horizontal = Left | Right,
+
+		Top = 1 << 2,
+		Botton = 1 << 3,
+		Vertical = Top | Botton
+	};
+
 protected:
 	sf::Text self_Text;
 	sf::RectangleShape self_Rectangle;
 
+	Alignment self_Alignment_Flag = Alignment::Middle;
+
 private:
 	void set_Rectangle_Color();
+	void set_Rectangle_Alignment();
 };
 
 class Button_Texture : public Button
@@ -64,3 +83,8 @@ protected:
 private:
 	void set_Sprite_Color();
 };
+
+
+Button_Text::Alignment operator|(Button_Text::Alignment a, Button_Text::Alignment b);
+Button_Text::Alignment operator&(Button_Text::Alignment a, Button_Text::Alignment b);
+bool operator&&(Button_Text::Alignment a, Button_Text::Alignment b);
