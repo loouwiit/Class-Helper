@@ -40,16 +40,14 @@ DLL void* init(void* self)
 
 	text[1].get_Text().setString(L"º”‘ÿseat.dll");
 	text[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[1].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
-	text[1].set_Alignment(Button_Text::Alignment::Botton);
+	text[1].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2 - 50));
 	text[1].set_Default_Color(sf::Color(0x0));
 	text[1].set_High_Light_Color(sf::Color(0x33333366));
 	text[1].init();
 
 	text[2].get_Text().setString(L"º”‘ÿsanitation.dll");
 	text[2].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[2].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
-	text[2].set_Alignment(Button_Text::Alignment::Top);
+	text[2].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2 + 50));
 	text[2].set_Default_Color(sf::Color(0x0));
 	text[2].set_High_Light_Color(sf::Color(0x33333366));
 	text[2].init();
