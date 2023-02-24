@@ -27,7 +27,7 @@ sf::RenderTexture* texture;
 Button_Text text_Exit;
 Button_Text* seats;
 unsigned seats_Number = 0;
-sf::Color background_Color = sf::Color(0x99FFFFFF);
+sf::Color background_Color = sf::Color(0x000000FF);
 
 DLL void* init(void* self)
 {
@@ -215,6 +215,7 @@ void seats_Load(const char Path[])
 		seats[i].get_Text().setFont(font);
 		seats[i].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 		seats[i].get_Text().setString(L"test");
+		seats[i].get_Text().setStyle(sf::Text::Bold);
 		seats[i].get_Text().setCharacterSize(72);
 		//seats[i].get_Text().setPosition((float)(1920 / 2 + 100 * (int)(i % 3 - 1)), (float)(1080 / 2 + 100 * (i / 3 - 1)));
 		seats[i].set_Default_Color(sf::Color(0x0));
