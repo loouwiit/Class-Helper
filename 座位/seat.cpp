@@ -217,8 +217,8 @@ void seats_Load(const char Path[])
 		seats[i].get_Text().setString(L"test");
 		seats[i].get_Text().setCharacterSize(72);
 		//seats[i].get_Text().setPosition((float)(1920 / 2 + 100 * (int)(i % 3 - 1)), (float)(1080 / 2 + 100 * (i / 3 - 1)));
-		seats[i].set_Default_Color(sf::Color(0x333333FF));
-		seats[i].set_High_Light_Color(sf::Color(0x333333FF));
+		seats[i].set_Default_Color(sf::Color(0x0));
+		seats[i].set_High_Light_Color(sf::Color(0x33333366));
 		seats[i].init();
 	}
 
@@ -244,10 +244,20 @@ void seats_Load(const char Path[])
 
 		for (unsigned row = 0; row < rows; row++)
 		{
+			if (index >= seats_Number)
+			{
+				//Òì³£
+				printf("seat::seats_Load:Ë÷Òý´íÎó£¬seats_Number = %d£¬¶øindex = %d", seats_Number, index);
+				printf("|lines = %d; rows = %d", lines, rows);
+				break;
+				break;
+			}
+
 			file >> string;
 			mbstowcs_s(NULL, buffer, sizeof(buffer) / sizeof(wchar_t), string, _TRUNCATE);
 			seats[index].get_Text().setString(buffer);
 			seats[index].get_Text().setPosition(X, Y);
+			seats[index].init();
 
 			index++;
 			X += delta_X;

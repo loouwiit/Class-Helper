@@ -28,7 +28,7 @@ void Button_Text::set_High_Light(bool flag)
 
 void Button_Text::init()
 {
-	set_Rectangle_Alignment();
+	set_Text_Alignment();
 
 	sf::FloatRect rect;
 	rect = self_Text.getGlobalBounds();
@@ -56,7 +56,7 @@ sf::Text& Button_Text::get_Text()
 void Button_Text::set_Alignment(Alignment alignment)
 {
 	self_Alignment_Flag = alignment;
-	set_Rectangle_Alignment();
+	set_Text_Alignment();
 }
 
 void Button_Text::set_Rectangle_Color()
@@ -67,7 +67,7 @@ void Button_Text::set_Rectangle_Color()
 		self_Rectangle.setFillColor(self_Default_Color);
 }
 
-void Button_Text::set_Rectangle_Alignment()
+void Button_Text::set_Text_Alignment()
 {
 	sf::FloatRect rect = self_Text.getGlobalBounds();
 	sf::Vector2f origin{ 0,0 };

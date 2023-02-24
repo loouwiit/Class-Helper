@@ -54,7 +54,7 @@ protected:
 
 private:
 	void set_Rectangle_Color();
-	void set_Rectangle_Alignment();
+	void set_Text_Alignment();
 };
 
 class Button_Texture : public Button
