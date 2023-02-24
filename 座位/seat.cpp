@@ -1,3 +1,4 @@
+#include <string>
 #include <fstream>
 #include "Interface.h"
 #include "Button.h"
@@ -47,7 +48,7 @@ DLL void* init(void* self)
 	text_Exit.set_High_Light_Color(sf::Color(0x33333366));
 
 	setlocale(LC_ALL, "chs");
-	seats_Load(".\\resources\\seat\\seat-.txt");
+	seats_Load(".\\resources\\seat\\seat.txt");
 
 	return nullptr;
 }
@@ -202,6 +203,57 @@ void seats_Load(const char Path[])
 		seats[1].set_Default_Color(sf::Color(0x0));
 		seats[1].set_High_Light_Color(sf::Color(0x33333366));
 		return;
+	}
+
+
+	file >> seats_Number;
+	if (seats != nullptr) delete[] seats;
+	seats = new Button_Text[seats_Number];
+
+	for (unsigned i = 0; i < seats_Number; i++)
+	{
+		seats[i].get_Text().setFont(font);
+		seats[i].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+		seats[i].get_Text().setString(L"test");
+		seats[i].get_Text().setCharacterSize(72);
+		//seats[i].get_Text().setPosition((float)(1920 / 2 + 100 * (int)(i % 3 - 1)), (float)(1080 / 2 + 100 * (i / 3 - 1)));
+		seats[i].set_Default_Color(sf::Color(0x333333FF));
+		seats[i].set_High_Light_Color(sf::Color(0x333333FF));
+		seats[i].init();
+	}
+
+	char string[50] = "";
+	wchar_t buffer[50] = L"";
+
+	unsigned index = 0;
+	unsigned lines = 0;
+	unsigned rows = 0;
+	float delta_X = 0;
+	float delta_Y = 0;
+	float X = 100;
+	float Y = 100;
+
+	file >> lines;
+	delta_Y = (float)(1080 / lines);
+
+	for (unsigned line = 0; line < lines; line++)
+	{
+		file >> rows;
+		delta_X = (float)(1720 / rows);
+		X = 100;
+
+		for (unsigned row = 0; row < rows; row++)
+		{
+			file >> string;
+			mbstowcs_s(NULL, buffer, sizeof(buffer) / sizeof(wchar_t), string, _TRUNCATE);
+			seats[index].get_Text().setString(buffer);
+			seats[index].get_Text().setPosition(X, Y);
+
+			index++;
+			X += delta_X;
+		}
+
+		Y += delta_Y;
 	}
 
 	file.close();
