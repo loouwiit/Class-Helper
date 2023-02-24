@@ -16,6 +16,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "座位", "座位\座位.vcx
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "卫生", "卫生\卫生.vcxproj", "{69798650-D1E9-4B48-AFAF-4BF7B788C469}"
+	ProjectSection(ProjectDependencies) = postProject
+		{17E21F9C-3B17-4674-82BE-1E39F57EA1C2} = {17E21F9C-3B17-4674-82BE-1E39F57EA1C2}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

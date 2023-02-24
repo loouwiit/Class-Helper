@@ -25,6 +25,11 @@ class Button_Text : public Button
 public:
 	enum class Alignment : char;
 
+	Button_Text();
+
+	static void set_Font(sf::Font font);
+	static sf::Font get_Font();
+
 	sf::Text& get_Text();
 	void set_Alignment(Alignment alignment);
 
@@ -47,6 +52,9 @@ public:
 	};
 
 protected:
+	static sf::Font self_Font;
+	static bool self_Font_Loaded;
+
 	sf::Text self_Text;
 	sf::RectangleShape self_Rectangle;
 

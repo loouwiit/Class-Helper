@@ -27,6 +27,9 @@
     <ClCompile Include="..\助长\Interface.cpp" />
     <ClCompile Include="sanitation.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

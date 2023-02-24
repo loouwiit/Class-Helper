@@ -21,7 +21,6 @@ void seats_Clicked(unsigned index);
 
 using Function = Interface::Function;
 
-sf::Font font;
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
 Button_Text text_Exit;
@@ -36,9 +35,6 @@ DLL void* init(void* self)
 	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
-	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
-
-	text_Exit.get_Text().setFont(font);
 	text_Exit.get_Text().setString(L"退出seat.dll");
 	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text_Exit.get_Text().setPosition((float)(1920 - 50), (float)50);
@@ -185,7 +181,6 @@ void seats_Load(const char Path[])
 		seats_Number = 2;
 		seats = new Button_Text[seats_Number];
 
-		seats[0].get_Text().setFont(font);
 		seats[0].get_Text().setString(L"文件读取失败,路径:");
 		seats[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 		seats[0].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
@@ -194,7 +189,6 @@ void seats_Load(const char Path[])
 		seats[0].set_Default_Color(sf::Color(0x0));
 		seats[0].set_High_Light_Color(sf::Color(0x33333366));
 
-		seats[1].get_Text().setFont(font);
 		seats[1].get_Text().setString(buffer);
 		seats[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 		seats[1].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
@@ -212,7 +206,6 @@ void seats_Load(const char Path[])
 
 	for (unsigned i = 0; i < seats_Number; i++)
 	{
-		seats[i].get_Text().setFont(font);
 		seats[i].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 		seats[i].get_Text().setString(L"test");
 		seats[i].get_Text().setStyle(sf::Text::Bold);

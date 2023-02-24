@@ -20,6 +20,10 @@ void Button::set_Default_Color(sf::Color color)
 	self_Default_Color = color;
 }
 
+
+bool Button_Text::self_Font_Loaded = false;
+sf::Font Button_Text::self_Font;
+
 void Button_Text::set_High_Light(bool flag)
 {
 	self_High_Light = flag;
@@ -46,6 +50,26 @@ void Button_Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
 bool Button_Text::is_Clicked(sf::Vector2f position)
 {
 	return self_Rectangle.getGlobalBounds().contains(position);
+}
+
+Button_Text::Button_Text()
+{
+	if (!self_Font_Loaded)
+	{
+		if (!self_Font.loadFromFile("C:\\windows\\fonts\\msyh.ttc")) self_Font.loadFromFile("C:\\windows\\fonts\\msyh.ttf");
+		self_Font_Loaded = true;
+	}
+	self_Text.setFont(self_Font);
+}
+
+void Button_Text::set_Font(sf::Font font)
+{
+	self_Font = font;
+}
+
+sf::Font Button_Text::get_Font()
+{
+	return self_Font;
 }
 
 sf::Text& Button_Text::get_Text()
@@ -80,6 +104,7 @@ void Button_Text::set_Text_Alignment()
 
 	self_Text.setOrigin(origin.x, origin.y);
 }
+
 
 const sf::Texture& Button_Texture::get_Texture()
 {

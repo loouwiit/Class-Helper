@@ -18,7 +18,6 @@ using Function = Interface::Function;
 
 constexpr int text_Nunber = 3;
 
-sf::Font font;
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
 Button_Text text[text_Nunber];
@@ -31,9 +30,6 @@ DLL void* init(void* self)
 	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
-	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
-
-	text[0].get_Text().setFont(font);
 	text[0].get_Text().setString(L"退出sanitation.dll");
 	text[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text[0].get_Text().setPosition((float)(1920 - 50), (float)50);
@@ -42,7 +38,6 @@ DLL void* init(void* self)
 	text[0].set_High_Light_Color(sf::Color(0x33333366));
 	text[0].init();
 
-	text[1].get_Text().setFont(font);
 	text[1].get_Text().setString(L"加载seat.dll");
 	text[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text[1].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
@@ -51,7 +46,6 @@ DLL void* init(void* self)
 	text[1].set_High_Light_Color(sf::Color(0x33333366));
 	text[1].init();
 
-	text[2].get_Text().setFont(font);
 	text[2].get_Text().setString(L"已加载sanitation.dll");
 	text[2].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text[2].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
