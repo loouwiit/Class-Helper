@@ -216,8 +216,6 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	if (text_Apply.is_Clicked(mouse_f))
 	{
 		seat_Save(".\\resources\\seat\\seat.txt");
-		text_Apply.get_Text().setString(L"已应用更改");
-		text_Apply.init();
 	}
 
 	if (text_Resume.is_Clicked(mouse_f))
