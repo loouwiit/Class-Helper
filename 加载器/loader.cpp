@@ -31,7 +31,7 @@ DLL void* init(void* self)
 	texture = &::self->get_Texture();
 
 	text[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[0].set_Position((float)(1920 - 50), (float)50);
+	text[0].set_Position((float)(1920 - 50), (float)(1080 - 50));
 	text[0].set_Alignment(Button_Text::Alignment::Right); //”“∂‘∆Î
 	text[0].set_Default_Color(sf::Color(0x0));
 	text[0].set_High_Light_Color(sf::Color(0x33333366));

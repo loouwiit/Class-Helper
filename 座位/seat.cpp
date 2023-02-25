@@ -55,33 +55,33 @@ DLL void* init(void* self)
 	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
-	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Exit.set_Position((float)(1920 - 50), (float)50);
-	text_Exit.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Exit.set_Default_Color(sf::Color(0x000000FF));
-	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
-	text_Exit.set_Text(L"退出seat.dll");
-
-	text_Resume.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Resume.set_Position((float)(1920 - 50), (float)100);
-	text_Resume.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Resume.set_Default_Color(sf::Color(0x000000FF));
-	text_Resume.set_High_Light_Color(sf::Color(0x666666FF));
-	text_Resume.set_Text(L"恢复原位");
+	text_Apply.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Apply.set_Position((float)(1920 - 50), (float)(1080 - 200));
+	text_Apply.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Apply.set_Default_Color(sf::Color(0x000000FF));
+	text_Apply.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Apply.set_Text(L"应用更改");
 
 	text_Random.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Random.set_Position((float)(1920 - 50), (float)150);
+	text_Random.set_Position((float)(1920 - 50), (float)(1080 -150));
 	text_Random.set_Alignment(Button_Text::Alignment::Right); //右对齐
 	text_Random.set_Default_Color(sf::Color(0x000000FF));
 	text_Random.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Random.set_Text(L"随机重排");
 
-	text_Apply.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Apply.set_Position((float)(1920 - 50), (float)200);
-	text_Apply.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Apply.set_Default_Color(sf::Color(0x000000FF));
-	text_Apply.set_High_Light_Color(sf::Color(0x666666FF));
-	text_Apply.set_Text(L"应用更改");
+	text_Resume.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Resume.set_Position((float)(1920 - 50), (float)(1080 - 100));
+	text_Resume.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Resume.set_Default_Color(sf::Color(0x000000FF));
+	text_Resume.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Resume.set_Text(L"恢复原位");
+
+	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Exit.set_Position((float)(1920 - 50), (float)(1080 - 50));
+	text_Exit.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Exit.set_Default_Color(sf::Color(0x000000FF));
+	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Exit.set_Text(L"退出seat.dll");
 
 	srand((unsigned)time(nullptr));
 	setlocale(LC_ALL, "chs");
