@@ -216,12 +216,17 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	if (text_Apply.is_Clicked(mouse_f))
 	{
 		seat_Save(".\\resources\\seat\\seat.txt");
+		text_Apply.get_Text().setString(L"已应用更改");
+		text_Apply.init();
 	}
 
 	if (text_Resume.is_Clicked(mouse_f))
 	{
 		for (unsigned i = 0; i < seat_Active_Number; i++)
+		{
 			seats[seat_Active_Indexs[i]].get_Text().setString(seat_Strings[seat_Active_Indexs[i]]);
+			seats[seat_Active_Indexs[i]].init();
+		}
 	}
 
 	for (unsigned i = 0; i < seat_Number; i++)
@@ -434,7 +439,7 @@ void seat_Random()
 {
 	printf("seat::seat_Random:called\n");
 
-	unsigned buffer = 0;
+	unsigned change = 0;
 	unsigned rand_Position = 0;
 	unsigned rand_Times = 0;
 
@@ -447,9 +452,9 @@ void seat_Random()
 		{
 			rand_Position = rand() % seat_Active_Number;
 
-			buffer = seat_Random_Indexs[i];
+			change = seat_Random_Indexs[i];
 			seat_Random_Indexs[i] = seat_Random_Indexs[rand_Position];
-			seat_Random_Indexs[rand_Position] = buffer;
+			seat_Random_Indexs[rand_Position] = change;
 		}
 	} while (!seat_Is_Avilible()); //符合条件
 
@@ -457,9 +462,15 @@ void seat_Random()
 	for (unsigned i = 0; i < seat_Active_Number; i++)
 	{
 		seats[seat_Active_Indexs[i]].get_Text().setString(seat_Strings[seat_Active_Indexs[seat_Random_Indexs[i]]]);
+		seats[seat_Active_Indexs[i]].init();
 	}
 
 	printf("seat::seat_Random:rand_Times = %d\n", rand_Times);
+
+	wchar_t buffer[20] = L"";
+	swprintf_s(buffer, L"上次随机重排:%d次计算", rand_Times);
+	text_Random.get_Text().setString(buffer);
+	text_Random.init();
 
 	//[debug]
 	//for (unsigned i = 0; i < seat_Number; i++)
