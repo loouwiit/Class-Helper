@@ -190,6 +190,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	sf::Vector2f mouse_f{ (float)mouse.x,(float)mouse.y };
 
 	text_Exit.set_High_Light(text_Exit.is_Clicked(mouse_f));
+	text_Resume.set_High_Light(text_Resume.is_Clicked(mouse_f));
 	text_Random.set_High_Light(text_Random.is_Clicked(mouse_f));
 	text_Apply.set_High_Light(text_Apply.is_Clicked(mouse_f));
 
@@ -231,11 +232,11 @@ void seat_Load(const char Path[])
 {
 	std::ifstream file;
 
-		if (seats != nullptr) delete[] seats;
-		if (seat_Active_Indexs != nullptr) delete[] seat_Active_Indexs;
-		for (unsigned i = 0; i < seat_Number; i++)
-			if (seat_Strings[i] != nullptr) delete[] seat_Strings[i];
-		if (seat_Strings != nullptr) delete[] seat_Strings;
+	if (seats != nullptr) delete[] seats;
+	if (seat_Active_Indexs != nullptr) delete[] seat_Active_Indexs;
+	for (unsigned i = 0; i < seat_Number; i++)
+		if (seat_Strings[i] != nullptr) delete[] seat_Strings[i];
+	if (seat_Strings != nullptr) delete[] seat_Strings;
 
 	file.open(Path);
 	if (!file.is_open())
@@ -356,7 +357,7 @@ void seat_Load(const char Path[])
 
 		Y += delta_Y;
 	}
-	
+
 	seat_Random_Indexs = new unsigned[seat_Number];
 	for (unsigned i = 0; i < seat_Active_Number; i++) //所有正确的数值
 		seat_Random_Indexs[i] = i;
