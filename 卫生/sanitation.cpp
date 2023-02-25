@@ -33,7 +33,7 @@ DLL void* init(void* self)
 	text[0].get_Text().setString(L"退出sanitation.dll");
 	text[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text[0].get_Text().setPosition((float)(1920 - 50), (float)50);
-	text[0].set_Alignment(Button_Text::Alignment::Right | Button_Text::Alignment::Top); //右上对齐
+	text[0].set_Alignment(Button_Text::Alignment::Right); //右对齐
 	text[0].set_Default_Color(sf::Color(0x0));
 	text[0].set_High_Light_Color(sf::Color(0x33333366));
 	text[0].init();

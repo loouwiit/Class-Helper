@@ -30,7 +30,10 @@ sf::RenderTexture* texture;
 sf::Color background_Color = sf::Color(0x000000FF);
 
 Button_Text text_Exit;
+Button_Text text_Resume;
 Button_Text text_Random;
+Button_Text text_Apply;
+
 Button_Text* seats;
 unsigned seat_Number = 0;
 unsigned seat_Lines = 0;
@@ -53,18 +56,34 @@ DLL void* init(void* self)
 	text_Exit.get_Text().setString(L"退出seat.dll");
 	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
 	text_Exit.get_Text().setPosition((float)(1920 - 50), (float)50);
-	text_Exit.set_Alignment(Button_Text::Alignment::Right | Button_Text::Alignment::Top); //右上对齐
+	text_Exit.set_Alignment(Button_Text::Alignment::Right); //右对齐
 	text_Exit.init();
 	text_Exit.set_Default_Color(sf::Color(0x000000FF));
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
 
+	text_Resume.get_Text().setString(L"恢复原位");
+	text_Resume.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Resume.get_Text().setPosition((float)(1920 - 50), (float)100);
+	text_Resume.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Resume.init();
+	text_Resume.set_Default_Color(sf::Color(0x000000FF));
+	text_Resume.set_High_Light_Color(sf::Color(0x666666FF));
+
 	text_Random.get_Text().setString(L"随机重排");
 	text_Random.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Random.get_Text().setPosition((float)(1920 - 50), (float)100);
-	text_Random.set_Alignment(Button_Text::Alignment::Right | Button_Text::Alignment::Top); //右上对齐
+	text_Random.get_Text().setPosition((float)(1920 - 50), (float)150);
+	text_Random.set_Alignment(Button_Text::Alignment::Right); //右对齐
 	text_Random.init();
 	text_Random.set_Default_Color(sf::Color(0x000000FF));
 	text_Random.set_High_Light_Color(sf::Color(0x666666FF));
+
+	text_Apply.get_Text().setString(L"应用更改");
+	text_Apply.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Apply.get_Text().setPosition((float)(1920 - 50), (float)200);
+	text_Apply.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Apply.init();
+	text_Apply.set_Default_Color(sf::Color(0x000000FF));
+	text_Apply.set_High_Light_Color(sf::Color(0x666666FF));
 
 	srand((unsigned)time(nullptr));
 	setlocale(LC_ALL, "chs");
@@ -120,7 +139,9 @@ DLL void* draw(void* null)
 		texture->draw(seats[i]);
 
 	texture->draw(text_Exit);
+	texture->draw(text_Resume);
 	texture->draw(text_Random);
+	texture->draw(text_Apply);
 	return nullptr;
 }
 
@@ -132,7 +153,7 @@ DLL void* draw(void* null)
 
 void ened()
 {
-	seat_Save(".\\resources\\seat\\seat.txt");
+	//seat_Save(".\\resources\\seat\\seat.txt");
 
 	if (seats != nullptr)
 	{
@@ -170,6 +191,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 
 	text_Exit.set_High_Light(text_Exit.is_Clicked(mouse_f));
 	text_Random.set_High_Light(text_Random.is_Clicked(mouse_f));
+	text_Apply.set_High_Light(text_Apply.is_Clicked(mouse_f));
 
 	for (unsigned i = 0; i < seat_Number; i++)
 		seats[i].set_High_Light(seats[i].is_Clicked(mouse_f));
@@ -188,6 +210,17 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	if (text_Random.is_Clicked(mouse_f))
 	{
 		seat_Random();
+	}
+
+	if (text_Apply.is_Clicked(mouse_f))
+	{
+		seat_Save(".\\resources\\seat\\seat.txt");
+	}
+
+	if (text_Resume.is_Clicked(mouse_f))
+	{
+		for (unsigned i = 0; i < seat_Active_Number; i++)
+			seats[seat_Active_Indexs[i]].get_Text().setString(seat_Strings[seat_Active_Indexs[i]]);
 	}
 
 	for (unsigned i = 0; i < seat_Number; i++)
