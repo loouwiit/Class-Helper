@@ -16,10 +16,12 @@ void event_Key(sf::Event::KeyEvent key);
 void event_Mouse(sf::Event::MouseMoveEvent mouse);
 void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
-void seats_Load(const char Path[]);
-void seats_Save(const char Path[]);
-bool seats_Is_Good();
-void seats_Clicked(unsigned index);
+void seat_Load(const char Path[]);
+void seat_Save(const char Path[]);
+bool seat_Is_Good();
+void seat_Clicked(unsigned index);
+void seat_Random();
+bool seat_Is_Avilible();
 
 using Function = Interface::Function;
 
@@ -28,6 +30,7 @@ sf::RenderTexture* texture;
 sf::Color background_Color = sf::Color(0x000000FF);
 
 Button_Text text_Exit;
+Button_Text text_Random;
 Button_Text* seats;
 unsigned seat_Number = 0;
 unsigned seat_Lines = 0;
@@ -59,8 +62,17 @@ DLL void* init(void* self)
 	text_Exit.set_Default_Color(sf::Color(0x000000FF));
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
 
+	text_Random.get_Text().setString(L"随机重排");
+	text_Random.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Random.get_Text().setPosition((float)(1920 - 50), (float)100);
+	text_Random.set_Alignment(Button_Text::Alignment::Right | Button_Text::Alignment::Top); //右上对齐
+	text_Random.init();
+	text_Random.set_Default_Color(sf::Color(0x000000FF));
+	text_Random.set_High_Light_Color(sf::Color(0x666666FF));
+
+	srand((unsigned)time(nullptr));
 	setlocale(LC_ALL, "chs");
-	seats_Load(".\\resources\\seat\\seat.txt");
+	seat_Load(".\\resources\\seat\\seat.txt");
 
 	return nullptr;
 }
@@ -112,6 +124,7 @@ DLL void* draw(void* null)
 		texture->draw(seats[i]);
 
 	texture->draw(text_Exit);
+	texture->draw(text_Random);
 	return nullptr;
 }
 
@@ -123,7 +136,7 @@ DLL void* draw(void* null)
 
 void ened()
 {
-	seats_Save(".\\resources\\seat\\seat.txt");
+	seat_Save(".\\resources\\seat\\seat.txt");
 
 	if (seats != nullptr)
 	{
@@ -160,6 +173,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	sf::Vector2f mouse_f{ (float)mouse.x,(float)mouse.y };
 
 	text_Exit.set_High_Light(text_Exit.is_Clicked(mouse_f));
+	text_Random.set_High_Light(text_Random.is_Clicked(mouse_f));
 
 	for (unsigned i = 0; i < seat_Number; i++)
 		seats[i].set_High_Light(seats[i].is_Clicked(mouse_f));
@@ -175,11 +189,16 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 		ened();
 	}
 
+	if (text_Random.is_Clicked(mouse_f))
+	{
+		seat_Random();
+	}
+
 	for (unsigned i = 0; i < seat_Number; i++)
-		if (seats[i].is_Clicked(mouse_f)) seats_Clicked(i);
+		if (seats[i].is_Clicked(mouse_f)) seat_Clicked(i);
 }
 
-void seats_Load(const char Path[])
+void seat_Load(const char Path[])
 {
 	std::ifstream file;
 
@@ -192,7 +211,7 @@ void seats_Load(const char Path[])
 	file.open(Path);
 	if (!file.is_open())
 	{
-		printf("seat::seats_Load:加载%s失败\n", Path);
+		printf("seat::seat_Load:加载%s失败\n", Path);
 
 		seat_Number = 2;
 
@@ -279,7 +298,7 @@ void seats_Load(const char Path[])
 			if (index >= seat_Number)
 			{
 				//异常
-				printf("seat::seats_Load:索引错误，seat_Number = %d，而index = %d", seat_Number, index);
+				printf("seat::seat_Load:索引错误，seat_Number = %d，而index = %d", seat_Number, index);
 				break;
 				break;
 			}
@@ -309,8 +328,8 @@ void seats_Load(const char Path[])
 	seat_Random_Indexs = new unsigned[seat_Number];
 	for (unsigned i = 0; i < seat_Active_Number; i++) //所有正确的数值
 		seat_Random_Indexs[i] = i;
-	for (unsigned i = seat_Active_Number; i < seat_Number; i++) //剩下的填0
-		seat_Random_Indexs[i] = 0;
+	for (unsigned i = seat_Active_Number; i < seat_Number; i++) //剩下的填0xFF
+		seat_Random_Indexs[i] = (unsigned) - 1;
 
 	//[debug]
 	//wprintf(L"seat::seat_Load:seat_Number = %d\n", seat_Number);
@@ -324,14 +343,14 @@ void seats_Load(const char Path[])
 	file.close();
 }
 
-void seats_Save(const char Path[])
+void seat_Save(const char Path[])
 {
 	constexpr char space = ' ';
 	constexpr char endl = '\n';
 
-	if (!seats_Is_Good())
+	if (!seat_Is_Good())
 	{
-		printf("seat::seats_Save:数据结构错误\n");
+		printf("seat::seat_Save:数据结构错误\n");
 		return;
 	}
 
@@ -340,7 +359,7 @@ void seats_Save(const char Path[])
 	file.open(Path);
 	if (!file.is_open())
 	{
-		printf("seat::seats_Save:打开%s失败\n", Path);
+		printf("seat::seat_Save:打开%s失败\n", Path);
 		return;
 	}
 
@@ -364,7 +383,7 @@ void seats_Save(const char Path[])
 	file.close();
 }
 
-bool seats_Is_Good()
+bool seat_Is_Good()
 {
 	unsigned answer = 0;
 	for (unsigned i = 0; i < seat_Lines; i++)
@@ -373,7 +392,45 @@ bool seats_Is_Good()
 	return answer == seat_Number;
 }
 
-void seats_Clicked(unsigned index)
+void seat_Clicked(unsigned index)
 {
 	return;
+}
+
+void seat_Random()
+{
+	printf("seat::seat_Random:called\n");
+
+	unsigned buffer = 0;
+	unsigned rand_Position = 0;
+
+	//生成随机
+	do {
+		for (unsigned i = 0; i < seat_Active_Number; i++)
+		{
+			rand_Position = rand() % seat_Active_Number;
+
+			buffer = seat_Random_Indexs[i];
+			seat_Random_Indexs[i] = seat_Random_Indexs[rand_Position];
+			seat_Random_Indexs[rand_Position] = buffer;
+		}
+	} while (!seat_Is_Avilible()); //符合条件
+
+	//应用随机
+	for (unsigned i = 0; i < seat_Active_Number; i++)
+	{
+		seats[seat_String_Indexs[i]].get_Text().setString(seat_Strings[seat_String_Indexs[seat_Random_Indexs[i]]]);
+	}
+
+	//[debug]
+	for (unsigned i = 0; i < seat_Number; i++)
+	{
+		printf("seat_Random:seat_Random_Indexs[%d] = %d\n", i, seat_Random_Indexs[i]);
+		wprintf(L"seat_Random:随机后的字符;%s\n", seat_Strings[seat_String_Indexs[seat_Random_Indexs[i]]]);
+	}
+}
+
+bool seat_Is_Avilible()
+{
+	return true;
 }
