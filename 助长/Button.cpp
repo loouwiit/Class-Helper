@@ -77,6 +77,24 @@ sf::Text& Button_Text::get_Text()
 	return self_Text;
 }
 
+void Button_Text::set_Text(const sf::String& string)
+{
+	self_Text.setString(string);
+	init();
+}
+
+void Button_Text::set_Position(const sf::Vector2f& position)
+{
+	self_Text.setPosition(position);
+	init();
+}
+
+void Button_Text::set_Position(float x, float y)
+{
+	self_Text.setPosition(x, y);
+	init();
+}
+
 void Button_Text::set_Alignment(Alignment alignment)
 {
 	self_Alignment_Flag = alignment;

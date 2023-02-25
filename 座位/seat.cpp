@@ -53,37 +53,33 @@ DLL void* init(void* self)
 	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
-	text_Exit.get_Text().setString(L"退出seat.dll");
 	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Exit.get_Text().setPosition((float)(1920 - 50), (float)50);
+	text_Exit.set_Position((float)(1920 - 50), (float)50);
 	text_Exit.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Exit.init();
 	text_Exit.set_Default_Color(sf::Color(0x000000FF));
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Exit.set_Text(L"退出seat.dll");
 
-	text_Resume.get_Text().setString(L"恢复原位");
 	text_Resume.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Resume.get_Text().setPosition((float)(1920 - 50), (float)100);
+	text_Resume.set_Position((float)(1920 - 50), (float)100);
 	text_Resume.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Resume.init();
 	text_Resume.set_Default_Color(sf::Color(0x000000FF));
 	text_Resume.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Resume.set_Text(L"恢复原位");
 
-	text_Random.get_Text().setString(L"随机重排");
 	text_Random.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Random.get_Text().setPosition((float)(1920 - 50), (float)150);
+	text_Random.set_Position((float)(1920 - 50), (float)150);
 	text_Random.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Random.init();
 	text_Random.set_Default_Color(sf::Color(0x000000FF));
 	text_Random.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Random.set_Text(L"随机重排");
 
-	text_Apply.get_Text().setString(L"应用更改");
 	text_Apply.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Apply.get_Text().setPosition((float)(1920 - 50), (float)200);
+	text_Apply.set_Position((float)(1920 - 50), (float)200);
 	text_Apply.set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text_Apply.init();
 	text_Apply.set_Default_Color(sf::Color(0x000000FF));
 	text_Apply.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Apply.set_Text(L"应用更改");
 
 	srand((unsigned)time(nullptr));
 	setlocale(LC_ALL, "chs");
@@ -222,8 +218,7 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	{
 		for (unsigned i = 0; i < seat_Active_Number; i++)
 		{
-			seats[seat_Active_Indexs[i]].get_Text().setString(seat_Strings[seat_Active_Indexs[i]]);
-			seats[seat_Active_Indexs[i]].init();
+			seats[seat_Active_Indexs[i]].set_Text(seat_Strings[seat_Active_Indexs[i]]);
 		}
 	}
 
@@ -260,21 +255,19 @@ void seat_Load(const char Path[])
 		wchar_t buffer[200] = L"";
 		mbstowcs_s(NULL, buffer, sizeof(buffer) / sizeof(wchar_t), Path, _TRUNCATE);
 
-		seats[0].get_Text().setString(L"文件读取失败,路径:");
 		seats[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-		seats[0].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
+		seats[0].set_Position((float)(1920 / 2), (float)(1080 / 2));
 		seats[0].set_Alignment(Button_Text::Alignment::Top); //上对齐
-		seats[0].init();
 		seats[0].set_Default_Color(sf::Color(0x000000FF));
 		seats[0].set_High_Light_Color(sf::Color(0x666666FF));
+		seats[0].set_Text(L"文件读取失败,路径:");
 
-		seats[1].get_Text().setString(buffer);
 		seats[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-		seats[1].get_Text().setPosition((float)(1920 / 2), (float)(1080 / 2));
+		seats[1].set_Position((float)(1920 / 2), (float)(1080 / 2));
 		seats[1].set_Alignment(Button_Text::Alignment::Botton); //下对齐
-		seats[1].init();
 		seats[1].set_Default_Color(sf::Color(0x000000FF));
 		seats[1].set_High_Light_Color(sf::Color(0x666666FF));
+		seats[1].set_Text(buffer);
 		return;
 	}
 
@@ -295,13 +288,12 @@ void seat_Load(const char Path[])
 	for (unsigned i = 0; i < seat_Number; i++)
 	{
 		seats[i].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-		seats[i].get_Text().setString(L"test");
 		seats[i].get_Text().setStyle(sf::Text::Bold);
 		seats[i].get_Text().setCharacterSize(72);
-		//seats[i].get_Text().setPosition((float)(1920 / 2 + 100 * (int)(i % 3 - 1)), (float)(1080 / 2 + 100 * (i / 3 - 1)));
+		//seats[i].set_Position((float)(1920 / 2 + 100 * (int)(i % 3 - 1)), (float)(1080 / 2 + 100 * (i / 3 - 1)));
 		seats[i].set_Default_Color(sf::Color(0x000000FF));
 		seats[i].set_High_Light_Color(sf::Color(0x666666FF));
-		seats[i].init();
+		seats[i].set_Text(L"test");
 	}
 
 	char string[50] = "";
@@ -340,7 +332,7 @@ void seat_Load(const char Path[])
 
 			file >> string;
 			if (string[0] == '-' && string[1] == '\0')
-				seats[index].get_Text().setString(L"");
+				seats[index].set_Text(L"");
 			else
 			{
 				size_t size = strlen(string) + 1;
@@ -349,10 +341,9 @@ void seat_Load(const char Path[])
 				seat_Active_Number++; //遇到存在数值后加一
 				seat_Active_Rows[line]++; //对应行加一
 				mbstowcs_s(NULL, seat_Strings[index], size, string, _TRUNCATE);
-				seats[index].get_Text().setString(seat_Strings[index]);
+				seats[index].set_Text(seat_Strings[index]);
 			}
-			seats[index].get_Text().setPosition(X, Y);
-			seats[index].init();
+			seats[index].set_Position(X, Y);
 
 			index++;
 			X += delta_X;
@@ -459,16 +450,14 @@ void seat_Random()
 	//应用随机
 	for (unsigned i = 0; i < seat_Active_Number; i++)
 	{
-		seats[seat_Active_Indexs[i]].get_Text().setString(seat_Strings[seat_Active_Indexs[seat_Random_Indexs[i]]]);
-		seats[seat_Active_Indexs[i]].init();
+		seats[seat_Active_Indexs[i]].set_Text(seat_Strings[seat_Active_Indexs[seat_Random_Indexs[i]]]);
 	}
 
 	printf("seat::seat_Random:rand_Times = %d\n", rand_Times);
 
 	wchar_t buffer[20] = L"";
 	swprintf_s(buffer, L"上次随机重排:%d次计算", rand_Times);
-	text_Random.get_Text().setString(buffer);
-	text_Random.init();
+	text_Random.set_Text(buffer);
 
 	//[debug]
 	//for (unsigned i = 0; i < seat_Number; i++)
