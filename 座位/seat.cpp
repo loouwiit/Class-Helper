@@ -282,7 +282,7 @@ void seats_Load(const char Path[])
 			{
 				size_t size = strlen(string) + 1;
 				seat_Strings[index] = new wchar_t[size];
-				seat_String_Indexs[index] = string_Index_Position;
+				seat_String_Indexs[string_Index_Position] = index;
 				string_Index_Position++; //遇到存在数值后加一
 				mbstowcs_s(NULL, seat_Strings[index], size, string, _TRUNCATE);
 				seats[index].get_Text().setString(seat_Strings[index]);
@@ -296,6 +296,13 @@ void seats_Load(const char Path[])
 
 		Y += delta_Y;
 	}
+
+	//[debug]
+	//wprintf(L"seat::seat_Load:seat_Number = %d\n", seat_Number);
+	//for (unsigned i = 0; i < seat_Number; i++)
+	//	wprintf(L"seat::seat_Load:seat_strings[%d] = %s\n", i, seat_Strings[i]);
+	//for (unsigned i = 0; i < seat_Number; i++)
+	//	wprintf(L"seat::seat_Load:seat_string_index[%d] = %d\n", i, seat_String_Indexs[i]);
 
 	file.close();
 }
