@@ -115,6 +115,7 @@ DLL void* event(void* param)
 	case Event::MouseButtonPressed:
 	{
 		event_Mouse(event.mouseButton);
+		break;
 	}
 	default:
 	{
