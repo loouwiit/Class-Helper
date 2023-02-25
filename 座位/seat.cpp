@@ -23,8 +23,6 @@ void seat_Clicked(unsigned index);
 void seat_Random();
 bool seat_Is_Avilible();
 
-using Function = Interface::Function;
-
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
 sf::Color background_Color = sf::Color(0x000000FF);
@@ -33,6 +31,10 @@ Button_Text text_Exit;
 Button_Text text_Resume;
 Button_Text text_Random;
 Button_Text text_Apply;
+
+constexpr unsigned un1 = (unsigned)-1;
+unsigned clicked_Index = un1;
+wchar_t clicked_Last_String[50] = L"";
 
 Button_Text* seats;
 unsigned seat_Number = 0;
@@ -421,6 +423,23 @@ bool seat_Is_Good()
 
 void seat_Clicked(unsigned index)
 {
+	if (clicked_Index == un1)
+	{
+		printf("seat::seat_Clicked:ID = %d\n", index);
+
+		clicked_Index = index;
+		mbstowcs_s(NULL, clicked_Last_String, sizeof(clicked_Last_String) / sizeof(wchar_t), seats[clicked_Index].get_Text().getString().toAnsiString().c_str(), _TRUNCATE);
+		seats[clicked_Index].set_Text("?");
+		return;
+	}
+
+	//ÒÑµã»÷
+	printf("seat::seat_Clicked:swap %d and %d\n", clicked_Index, index);
+
+	seats[clicked_Index].set_Text(seats[index].get_Text().getString().toWideString());
+	seats[index].set_Text(clicked_Last_String);
+
+	clicked_Index = un1;
 	return;
 }
 
