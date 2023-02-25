@@ -36,15 +36,11 @@ unsigned seat_Number = 0;
 unsigned seat_Lines = 0;
 unsigned* seat_Rows = nullptr; //seat_Lines个
 wchar_t** seat_Strings = nullptr; //seat_Number个
-unsigned* seat_String_Indexs = nullptr; //只存储有数据的位置
-unsigned seat_Active_Number = 0;
-unsigned* seat_Random_Indexs = nullptr;
 
-//lines 是行数
-//rows 存储着每行的数据量（二维）
-//string 存储着每个字符（串的数组）
-//index 存储着需要随机的位置
-//random_index 是随机映射表
+unsigned seat_Active_Number = 0; //有数据的数量
+unsigned* seat_Active_Indexs = nullptr; //有数据的映射表
+unsigned* seat_Active_Rows = nullptr; //每行中有数据的个数
+unsigned* seat_Random_Indexs = nullptr; //随机用的映射表
 
 
 DLL void* init(void* self)
@@ -203,7 +199,7 @@ void seat_Load(const char Path[])
 	std::ifstream file;
 
 		if (seats != nullptr) delete[] seats;
-		if (seat_String_Indexs != nullptr) delete[] seat_String_Indexs;
+		if (seat_Active_Indexs != nullptr) delete[] seat_Active_Indexs;
 		for (unsigned i = 0; i < seat_Number; i++)
 			if (seat_Strings[i] != nullptr) delete[] seat_Strings[i];
 		if (seat_Strings != nullptr) delete[] seat_Strings;
@@ -216,8 +212,8 @@ void seat_Load(const char Path[])
 		seat_Number = 2;
 
 		seats = new Button_Text[seat_Number];
-		seat_String_Indexs = new unsigned[seat_Number];
-		for (unsigned i = 0; i < seat_Number; i++) seat_String_Indexs = 0;
+		seat_Active_Indexs = new unsigned[seat_Number];
+		for (unsigned i = 0; i < seat_Number; i++) seat_Active_Indexs = 0;
 		seat_Strings = new wchar_t* [seat_Number];
 		for (unsigned i = 0; i < seat_Number; i++) seat_Strings[i] = nullptr;
 
@@ -254,8 +250,8 @@ void seat_Load(const char Path[])
 	}
 
 	seats = new Button_Text[seat_Number];
-	seat_String_Indexs = new unsigned[seat_Number];
-	for (unsigned i = 0; i < seat_Number; i++) seat_String_Indexs[i] = 0;
+	seat_Active_Indexs = new unsigned[seat_Number];
+	for (unsigned i = 0; i < seat_Number; i++) seat_Active_Indexs[i] = 0;
 	seat_Strings = new wchar_t* [seat_Number];
 	for (unsigned i = 0; i < seat_Number; i++) seat_Strings[i] = nullptr;
 
@@ -285,11 +281,13 @@ void seat_Load(const char Path[])
 
 	file >> seat_Lines;
 	seat_Rows = new unsigned[seat_Lines];
+	seat_Active_Rows = new unsigned[seat_Lines];
 	delta_Y = (float)(1080 / seat_Lines);
 
 	for (unsigned line = 0; line < seat_Lines; line++)
 	{
 		file >> seat_Rows[line];
+		seat_Active_Rows[line] = 0;
 		delta_X = (float)(1620 / seat_Rows[line]);
 		X = 100;
 
@@ -310,8 +308,9 @@ void seat_Load(const char Path[])
 			{
 				size_t size = strlen(string) + 1;
 				seat_Strings[index] = new wchar_t[size];
-				seat_String_Indexs[seat_Active_Number] = index;
+				seat_Active_Indexs[seat_Active_Number] = index;
 				seat_Active_Number++; //遇到存在数值后加一
+				seat_Active_Rows[line]++; //对应行加一
 				mbstowcs_s(NULL, seat_Strings[index], size, string, _TRUNCATE);
 				seats[index].get_Text().setString(seat_Strings[index]);
 			}
@@ -336,7 +335,7 @@ void seat_Load(const char Path[])
 	//for (unsigned i = 0; i < seat_Number; i++)
 	//	wprintf(L"seat::seat_Load:seat_strings[%d] = %s\n", i, seat_Strings[i]);
 	//for (unsigned i = 0; i < seat_Number; i++)
-	//	wprintf(L"seat::seat_Load:seat_string_indexs[%d] = %d\n", i, seat_String_Indexs[i]);
+	//	wprintf(L"seat::seat_Load:seat_Active_Indexs[%d] = %d\n", i, seat_Active_Indexs[i]);
 	//for (unsigned i = 0; i < seat_Number; i++)
 	//	wprintf(L"seat::seat_Load:seat_Random_Indexs[%d] = %d\n", i, seat_Random_Indexs[i]);
 
@@ -403,9 +402,13 @@ void seat_Random()
 
 	unsigned buffer = 0;
 	unsigned rand_Position = 0;
+	unsigned rand_Times = 0;
 
 	//生成随机
-	do {
+	do
+	{
+		rand_Times++;
+
 		for (unsigned i = 0; i < seat_Active_Number; i++)
 		{
 			rand_Position = rand() % seat_Active_Number;
@@ -419,18 +422,54 @@ void seat_Random()
 	//应用随机
 	for (unsigned i = 0; i < seat_Active_Number; i++)
 	{
-		seats[seat_String_Indexs[i]].get_Text().setString(seat_Strings[seat_String_Indexs[seat_Random_Indexs[i]]]);
+		seats[seat_Active_Indexs[i]].get_Text().setString(seat_Strings[seat_Active_Indexs[seat_Random_Indexs[i]]]);
 	}
 
+	printf("seat::seat_Random:rand_Times = %d\n", rand_Times);
+
 	//[debug]
-	for (unsigned i = 0; i < seat_Number; i++)
-	{
-		printf("seat_Random:seat_Random_Indexs[%d] = %d\n", i, seat_Random_Indexs[i]);
-		wprintf(L"seat_Random:随机后的字符;%s\n", seat_Strings[seat_String_Indexs[seat_Random_Indexs[i]]]);
-	}
+	//for (unsigned i = 0; i < seat_Number; i++)
+	//{
+	//	printf("seat_Random:seat_Random_Indexs[%d] = %d\n", i, seat_Random_Indexs[i]);
+	//	wprintf(L"seat_Random:随机后的字符;%s\n", seat_Strings[seat_Active_Indexs[seat_Random_Indexs[i]]]);
+	//}
 }
 
 bool seat_Is_Avilible()
 {
-	return true;
+	unsigned* range = new unsigned[seat_Lines + 1]; //每行的取值范围
+	bool avilible = true;
+
+	//生成对应区间
+	range[0] = 0;
+	for (unsigned i = 1 ; i < seat_Lines; i++)
+		range[i] = range[i - 1] + seat_Active_Rows[i];
+
+	//检验合格性
+	unsigned old = 1;
+	unsigned now = 1;
+
+	for (unsigned index = 0; index < seat_Active_Number; index++)
+	{
+		//检验每一个的合格性
+
+		if (seat_Strings[index] == nullptr) continue; //空，不参与运算，直接下一个
+
+		old = 1;
+		now = 1;
+
+		while (!(range[old - 1] <= index && index <= range[old])) old++; //区间有交集，防止0出错误，同时不影响后面。
+		while (!(range[now - 1] <= seat_Random_Indexs[index] && seat_Random_Indexs[index] <= range[now])) now++;
+
+		if (old == now)
+		{
+			avilible = false;
+			break;
+		}
+	}
+
+	delete[] range;
+	range = nullptr;
+
+	return avilible;
 }
