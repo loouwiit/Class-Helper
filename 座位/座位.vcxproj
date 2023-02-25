@@ -26,9 +26,13 @@
   <ItemGroup>
     <ClInclude Include="..\助长\Button.h" />
     <ClInclude Include="..\助长\Interface.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="座位.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

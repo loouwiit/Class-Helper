@@ -254,6 +254,10 @@
   <ItemGroup>
     <ClInclude Include="..\助长\Button.h" />
     <ClInclude Include="..\助长\Interface.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="加载器.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
