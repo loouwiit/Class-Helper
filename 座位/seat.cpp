@@ -34,6 +34,13 @@ unsigned seat_Lines = 0;
 unsigned* seat_Rows = nullptr; //seat_Lines个
 wchar_t** seat_Strings = nullptr; //seat_Number个
 unsigned* seat_String_Indexs = nullptr; //只存储有数据的位置
+unsigned* seat_Random_Indexs = nullptr;
+
+//lines 是行数
+//rows 存储着每行的数据量（二维）
+//string 存储着每个字符（串的数组）
+//index 存储者需要随机的位置
+//random_index 是随机映射表
 
 
 DLL void* init(void* self)
@@ -296,13 +303,21 @@ void seats_Load(const char Path[])
 
 		Y += delta_Y;
 	}
+	
+	seat_Random_Indexs = new unsigned[seat_Number];
+	for (unsigned i = 0; i < string_Index_Position; i++) //所有正确的数值
+		seat_Random_Indexs[i] = i;
+	for (unsigned i = string_Index_Position; i < seat_Number; i++) //剩下的填0
+		seat_Random_Indexs[i] = 0;
 
 	//[debug]
 	//wprintf(L"seat::seat_Load:seat_Number = %d\n", seat_Number);
 	//for (unsigned i = 0; i < seat_Number; i++)
 	//	wprintf(L"seat::seat_Load:seat_strings[%d] = %s\n", i, seat_Strings[i]);
 	//for (unsigned i = 0; i < seat_Number; i++)
-	//	wprintf(L"seat::seat_Load:seat_string_index[%d] = %d\n", i, seat_String_Indexs[i]);
+	//	wprintf(L"seat::seat_Load:seat_string_indexs[%d] = %d\n", i, seat_String_Indexs[i]);
+	//for (unsigned i = 0; i < seat_Number; i++)
+	//	wprintf(L"seat::seat_Load:seat_Random_Indexs[%d] = %d\n", i, seat_Random_Indexs[i]);
 
 	file.close();
 }
@@ -320,11 +335,28 @@ void seats_Save(const char Path[])
 
 	std::ofstream file;
 
-	file.open(Path, std::ios::app); //app:追加模式
+	file.open(Path); //app:追加模式
 	if (!file.is_open())
 	{
 		printf("seat::seats_Save:打开%s失败\n", Path);
 		return;
+	}
+
+	unsigned index = 0;
+	std::string string;
+
+	file << seat_Number << space << seat_Lines << endl;
+	for (unsigned line = 0; line < seat_Lines; line++)
+	{
+		file << seat_Rows[line] << space;
+		for (unsigned row = 0; row < seat_Rows[line]; row++)
+		{
+			string = seats[index].get_Text().getString().toAnsiString();
+			if (string[0] == '\0') file << '-' << space;
+			else file << string << space;
+			index++;
+		}
+		file << endl;
 	}
 
 	file.close();
