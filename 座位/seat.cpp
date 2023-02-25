@@ -328,8 +328,8 @@ void seat_Load(const char Path[])
 	seat_Random_Indexs = new unsigned[seat_Number];
 	for (unsigned i = 0; i < seat_Active_Number; i++) //所有正确的数值
 		seat_Random_Indexs[i] = i;
-	for (unsigned i = seat_Active_Number; i < seat_Number; i++) //剩下的填0xFF
-		seat_Random_Indexs[i] = (unsigned) - 1;
+	for (unsigned i = seat_Active_Number; i < seat_Number; i++) //剩下的填0
+		seat_Random_Indexs[i] = 0;
 
 	//[debug]
 	//wprintf(L"seat::seat_Load:seat_Number = %d\n", seat_Number);
