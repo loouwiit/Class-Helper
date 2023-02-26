@@ -214,11 +214,13 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 
 	if (text_Apply.is_Clicked(mouse_f))
 	{
+		printf("event_Mouse:save\n");
 		seat_Save(".\\resources\\seat\\seat.txt");
 	}
 
 	if (text_Resume.is_Clicked(mouse_f))
 	{
+		printf("event_Mouse:resume\n");
 		for (unsigned i = 0; i < seat_Active_Number; i++)
 		{
 			seats[seat_Active_Indexs[i]].set_Text(seat_Strings[seat_Active_Indexs[i]]);
@@ -494,27 +496,31 @@ bool seat_Is_Avilible()
 
 	//生成对应区间
 	range[0] = 0;
-	for (unsigned i = 1 ; i < seat_Lines; i++)
-		range[i] = range[i - 1] + seat_Active_Rows[i];
+	for (unsigned i = 0 ; i < seat_Lines; i++)
+		range[i + 1] = range[i] + seat_Active_Rows[i];
 
 	//检验合格性
-	unsigned old = 1;
-	unsigned now = 1;
+	unsigned old_Row = 1;
+	unsigned now_Row = 1;
+	unsigned index_Now = 0;
 
 	for (unsigned index = 0; index < seat_Active_Number; index++)
 	{
 		//检验每一个的合格性
 
-		if (seat_Strings[index] == nullptr) continue; //空，不参与运算，直接下一个
+		old_Row = 1;
+		now_Row = 1;
+		index_Now = 0;
 
-		old = 1;
-		now = 1;
+		while (seat_Random_Indexs[index_Now] != index) index_Now++; //寻找自己的位置
+		wprintf(L"seat::seat_Is_Avilible: %s move from %d to %d\n", seat_Strings[seat_Active_Indexs[index]], index, index_Now );
 
-		while (!(range[old - 1] <= index && index <= range[old])) old++; //区间有交集，防止0出错误，同时不影响后面。
-		while (!(range[now - 1] <= seat_Random_Indexs[index] && seat_Random_Indexs[index] <= range[now])) now++;
+		while (!(range[old_Row - 1] <= index && index < range[old_Row])) old_Row++;
+		while (!(range[now_Row - 1] <= index_Now && index_Now < range[now_Row])) now_Row++;
 
-		if (old == now)
+		if (old_Row == now_Row)
 		{
+			wprintf(L"seat::seat_Is_Avilible: %s is same row:%d\n", seat_Strings [seat_Active_Indexs[index]], old_Row);
 			avilible = false;
 			break;
 		}
