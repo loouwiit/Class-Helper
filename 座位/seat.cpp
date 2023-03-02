@@ -47,6 +47,8 @@ unsigned* seat_Active_Indexs = nullptr; //有数据的映射表
 unsigned* seat_Active_Rows = nullptr; //每行中有数据的个数
 unsigned* seat_Random_Indexs = nullptr; //随机用的映射表
 
+unsigned** seat_Probability = nullptr; //统计
+
 
 DLL void* init(void* self)
 {
@@ -240,6 +242,8 @@ void seat_Load(const char Path[])
 	for (unsigned i = 0; i < seat_Number; i++)
 		if (seat_Strings[i] != nullptr) delete[] seat_Strings[i];
 	if (seat_Strings != nullptr) delete[] seat_Strings;
+	for (unsigned i = 0; i < seat_Number; i++)
+		if (seat_Probability[i] != nullptr) delete[] seat_Probability[i];
 
 	file.open(Path);
 	if (!file.is_open())
@@ -253,6 +257,8 @@ void seat_Load(const char Path[])
 		for (unsigned i = 0; i < seat_Number; i++) seat_Active_Indexs = 0;
 		seat_Strings = new wchar_t* [seat_Number];
 		for (unsigned i = 0; i < seat_Number; i++) seat_Strings[i] = nullptr;
+
+		seat_Probability = nullptr;
 
 		seat_Lines = 0;
 		seat_Rows = nullptr;
@@ -300,6 +306,9 @@ void seat_Load(const char Path[])
 		seats[i].set_High_Light_Color(sf::Color(0x666666FF));
 		seats[i].set_Text(L"test");
 	}
+
+	seat_Probability = new unsigned* [seat_Number];
+	for (unsigned i = 0; i < seat_Number; i++) seat_Probability[i] = new unsigned[seat_Number] {0};
 
 	char string[50] = "";
 
@@ -475,7 +484,23 @@ void seat_Random()
 		seats[seat_Active_Indexs[i]].set_Text(seat_Strings[seat_Active_Indexs[seat_Random_Indexs[i]]]);
 	}
 
+	//记录随机
+	for (unsigned i = 0; i < seat_Active_Number; i++)
+	{
+		seat_Probability[i][seat_Random_Indexs[i]]++;
+	}
+
 	printf("seat::seat_Random:rand_Times = %d\n", rand_Times);
+
+	for (unsigned i = 0; i < seat_Number; i++)
+	{
+		printf("seat::seat_Random:seat_Probability: %u = %u", i, seat_Probability[i][0]);
+		for (unsigned j = 1; j < seat_Number; j++)
+		{
+			printf(", %u", seat_Probability[i][j]);
+		}
+		printf("\n");
+	}
 
 	wchar_t buffer[20] = L"";
 	swprintf_s(buffer, L"上次随机重排:%d次计算", rand_Times);
