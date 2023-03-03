@@ -20,8 +20,8 @@ void seat_Load(const char Path[]);
 void seat_Save(const char Path[]);
 bool seat_Is_Good();
 void seat_Clicked(unsigned index);
-void seat_Random();
-bool seat_Is_Avilible();
+void seat_Random(bool enable_Print = true);
+bool seat_Is_Avilible(bool enable_Print = true);
 
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
@@ -35,6 +35,8 @@ Button_Text text_Apply;
 constexpr unsigned un1 = (unsigned)-1;
 unsigned clicked_Index = un1;
 wchar_t clicked_Last_String[50] = L"";
+
+bool auto_Random = false;
 
 Button_Text* seats;
 unsigned seat_Number = 0;
@@ -129,6 +131,7 @@ DLL void* event(void* param)
 
 DLL void* compute(void* null)
 {
+	if (auto_Random) seat_Random(false);
 	return nullptr;
 }
 
@@ -181,6 +184,25 @@ void event_Key(sf::Event::KeyEvent key)
 	}
 	default:
 	{
+		break;
+	}
+	case Key::A:
+	{
+		auto_Random = !auto_Random;
+		printf("event::Key:auto_Random = %s\n", auto_Random ? "true" : "false");
+		break;
+	}
+	case Key::P:
+	{
+		for (unsigned i = 0; i < seat_Number; i++)
+		{
+			printf("seat::seat_Random:seat_Probability: %u = %u", i, seat_Probability[i][0]);
+			for (unsigned j = 1; j < seat_Number; j++)
+			{
+				printf(", %u", seat_Probability[i][j]);
+			}
+			printf("\n");
+		}
 		break;
 	}
 	}
@@ -455,7 +477,7 @@ void seat_Clicked(unsigned index)
 	return;
 }
 
-void seat_Random()
+void seat_Random(bool enable_Print)
 {
 	printf("seat::seat_Random:called\n");
 
@@ -476,7 +498,7 @@ void seat_Random()
 			seat_Random_Indexs[i] = seat_Random_Indexs[rand_Position];
 			seat_Random_Indexs[rand_Position] = change;
 		}
-	} while (!seat_Is_Avilible()); //符合条件
+	} while (!seat_Is_Avilible(enable_Print)); //符合条件
 
 	//应用随机
 	for (unsigned i = 0; i < seat_Active_Number; i++)
@@ -490,16 +512,19 @@ void seat_Random()
 		seat_Probability[i][seat_Random_Indexs[i]]++;
 	}
 
-	printf("seat::seat_Random:rand_Times = %d\n", rand_Times);
-
-	for (unsigned i = 0; i < seat_Number; i++)
+	if (enable_Print)
 	{
-		printf("seat::seat_Random:seat_Probability: %u = %u", i, seat_Probability[i][0]);
-		for (unsigned j = 1; j < seat_Number; j++)
+		printf("seat::seat_Random:rand_Times = %d\n", rand_Times);
+
+		for (unsigned i = 0; i < seat_Number; i++)
 		{
-			printf(", %u", seat_Probability[i][j]);
+			printf("seat::seat_Random:seat_Probability: %u = %u", i, seat_Probability[i][0]);
+			for (unsigned j = 1; j < seat_Number; j++)
+			{
+				printf(", %u", seat_Probability[i][j]);
+			}
+			printf("\n");
 		}
-		printf("\n");
 	}
 
 	wchar_t buffer[20] = L"";
@@ -514,7 +539,7 @@ void seat_Random()
 	//}
 }
 
-bool seat_Is_Avilible()
+bool seat_Is_Avilible(bool enable_Print)
 {
 	unsigned* range = new unsigned[seat_Lines + 1]; //每行的取值范围
 	bool avilible = true;
@@ -538,14 +563,14 @@ bool seat_Is_Avilible()
 		index_Now = 0;
 
 		while (seat_Random_Indexs[index_Now] != index) index_Now++; //寻找自己的位置
-		wprintf(L"seat::seat_Is_Avilible: %s move from %d to %d\n", seat_Strings[seat_Active_Indexs[index]], index, index_Now );
+		if (enable_Print) wprintf(L"seat::seat_Is_Avilible: %s move from %d to %d\n", seat_Strings[seat_Active_Indexs[index]], index, index_Now );
 
 		while (!(range[old_Row - 1] <= index && index < range[old_Row])) old_Row++;
 		while (!(range[now_Row - 1] <= index_Now && index_Now < range[now_Row])) now_Row++;
 
 		if (old_Row == now_Row)
 		{
-			wprintf(L"seat::seat_Is_Avilible: %s is same row:%d\n", seat_Strings [seat_Active_Indexs[index]], old_Row);
+			if (enable_Print) wprintf(L"seat::seat_Is_Avilible: %s is same row:%d\n", seat_Strings [seat_Active_Indexs[index]], old_Row);
 			avilible = false;
 			break;
 		}
