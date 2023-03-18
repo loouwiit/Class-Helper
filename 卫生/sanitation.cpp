@@ -14,40 +14,31 @@ void event_Key(sf::Event::KeyEvent key);
 void event_Mouse(sf::Event::MouseMoveEvent mouse);
 void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
-using Function = Interface::Function;
-
-constexpr int text_Nunber = 3;
+using wstring = wchar_t*;
 
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
-Button_Text text[text_Nunber];
-sf::Color background_Color = sf::Color(0x99FFFFFF);
+sf::Color background_Color = sf::Color(0x000000FF);
+
+Button_Text text_Exit;
+
+unsigned group_Number = 0;
+wstring* group_Names = nullptr;
+wstring** group_Member_Names = nullptr;
 
 DLL void* init(void* self)
 {
-	printf("loader::init\n");
+	printf("sanitation::init\n");
 
 	::self = (Interface_Dll*)self;
 	texture = &::self->get_Texture();
 
-	text[0].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[0].set_Position((float)(1920 - 50), (float)(1080 - 50));
-	text[0].set_Alignment(Button_Text::Alignment::Right); //右对齐
-	text[0].set_Default_Color(sf::Color(0x0));
-	text[0].set_High_Light_Color(sf::Color(0x33333366));
-	text[0].set_Text(L"退出sanitation.dll");
-
-	text[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[1].set_Position((float)(1920 / 2), (float)(1080 / 2 - 50));
-	text[1].set_Default_Color(sf::Color(0x0));
-	text[1].set_High_Light_Color(sf::Color(0x33333366));
-	text[1].set_Text(L"加载seat.dll");
-
-	text[2].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[2].set_Position((float)(1920 / 2), (float)(1080 / 2 + 50));
-	text[2].set_Default_Color(sf::Color(0x0));
-	text[2].set_High_Light_Color(sf::Color(0x33333366));
-	text[2].set_Text(L"已加载sanitation.dll");
+	text_Exit.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Exit.set_Position((float)(1920 - 50), (float)(1080 - 50));
+	text_Exit.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Exit.set_Default_Color(sf::Color(0x000000FF));
+	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Exit.set_Text(L"退出sanitation.dll");
 
 	return nullptr;
 }
@@ -77,6 +68,7 @@ DLL void* event(void* param)
 	case Event::MouseButtonPressed:
 	{
 		event_Mouse(event.mouseButton);
+		break;
 	}
 	default:
 	{
@@ -94,8 +86,7 @@ DLL void* compute(void* null)
 DLL void* draw(void* null)
 {
 	texture->clear(background_Color);
-	for (int i = 0; i < text_Nunber; i++)
-		texture->draw(text[i]);
+	texture->draw(text_Exit);
 	return nullptr;
 }
 
@@ -109,7 +100,7 @@ void ened()
 {
 	self->set_Running(false);
 
-	printf("loader::ened\n");
+	printf("sanitation::ened\n");
 }
 
 void event_Key(sf::Event::KeyEvent key)
@@ -139,27 +130,14 @@ void event_Key(sf::Event::KeyEvent key)
 
 void event_Mouse(sf::Event::MouseMoveEvent mouse)
 {
-	for (int i = 0; i < text_Nunber; i++)
-		text[i].set_High_Light(text[i].is_Clicked({ (float)mouse.x,(float)mouse.y }));
+	text_Exit.set_High_Light(text_Exit.is_Clicked({ (float)mouse.x,(float)mouse.y }));
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
 {
-	if (text[0].is_Clicked({ (float)mouse.x,(float)mouse.y }))
+	if (text_Exit.is_Clicked({ (float)mouse.x,(float)mouse.y }))
 	{
 		self->set_Next_Dll(".\\dll\\loader.dll");
 		ened();
-	}
-
-	if (text[1].is_Clicked({ (float)mouse.x,(float)mouse.y }))
-	{
-		self->set_Next_Dll(".\\dll\\seat.dll");
-		ened();
-	}
-
-	if (text[2].is_Clicked({ (float)mouse.x,(float)mouse.y }))
-	{
-		//self->set_Next_Dll(".\\dll\\sanitation.dll");
-		//ened();
 	}
 }

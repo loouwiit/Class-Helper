@@ -222,6 +222,9 @@
   <ItemGroup>
     <ResourceCompile Include="助长.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="resources\sanitation\sanitation.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
