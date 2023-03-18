@@ -462,7 +462,7 @@ void seat_Clicked(unsigned index)
 		printf("seat::seat_Clicked:ID = %d\n", index);
 
 		clicked_Index = index;
-		mbstowcs_s(NULL, clicked_Last_String, sizeof(clicked_Last_String) / sizeof(wchar_t), seats[clicked_Index].get_Text().getString().toAnsiString().c_str(), _TRUNCATE);
+		wcscpy_s(clicked_Last_String, sizeof(clicked_Last_String) / sizeof(wchar_t), seats[clicked_Index].get_Text().getString().toWideString().c_str());
 		seats[clicked_Index].set_Text("?");
 		return;
 	}
@@ -470,7 +470,7 @@ void seat_Clicked(unsigned index)
 	//ÒÑµã»÷
 	printf("seat::seat_Clicked:swap %d and %d\n", clicked_Index, index);
 
-	seats[clicked_Index].set_Text(seats[index].get_Text().getString().toWideString());
+	seats[clicked_Index].set_Text(seats[index].get_Text().getString());
 	seats[index].set_Text(clicked_Last_String);
 
 	clicked_Index = un1;
