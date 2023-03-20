@@ -22,6 +22,36 @@ sf::Color background_Color = sf::Color(0x000000FF);
 
 Button_Text text_Exit;
 
+namespace Faces
+{
+	namespace Main_Face
+	{
+		namespace Functions
+		{
+			void* init(void* self) { return nullptr; };
+			void* event(void* param) { return nullptr; };
+			void* compute(void* null) { return nullptr; };
+			void* draw(void* null) { return nullptr; };
+		}
+
+		Interface main_Face;
+	}
+
+	namespace Team_Face
+	{
+		namespace Functions
+		{
+			void* init(void* self) { return nullptr; };
+			void* event(void* param) { return nullptr; };
+			void* compute(void* null) { return nullptr; };
+			void* draw(void* null) { return nullptr; };
+		}
+
+		Interface team_Face;
+	}
+}
+Interface* now_Face = &Faces::Main_Face::main_Face;
+
 unsigned group_Number = 0;
 wstring* group_Names = nullptr;
 wstring** group_Member_Names = nullptr;
@@ -39,6 +69,12 @@ DLL void* init(void* self)
 	text_Exit.set_Default_Color(sf::Color(0x000000FF));
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Exit.set_Text(L"ÍË³ösanitation.dll");
+
+	Faces::Main_Face::main_Face.set_Init(Faces::Main_Face::Functions::init);
+	Faces::Main_Face::main_Face.init();
+
+	Faces::Team_Face::team_Face.set_Init(Faces::Team_Face::Functions::init);
+	Faces::Team_Face::team_Face.init();
 
 	return nullptr;
 }
@@ -85,7 +121,10 @@ DLL void* compute(void* null)
 
 DLL void* draw(void* null)
 {
+	now_Face->draw();
+
 	texture->clear(background_Color);
+	//texture->draw(*now_Face);
 	texture->draw(text_Exit);
 	return nullptr;
 }
