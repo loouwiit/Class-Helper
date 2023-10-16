@@ -239,6 +239,14 @@ unsigned short Line::getTotolWeight()
 	return totolWeight;
 }
 
+Point& Line::operator[](unsigned char index)
+{
+	Point* target = head.getNext();
+	while (index > 0)
+		target = target->getNext();
+	return *target;
+}
+
 //set
 
 Set::~Set()
@@ -351,6 +359,11 @@ void Set::rand()
 
 		swapWeight--;
 	}
+}
+
+Line& Set::operator[](unsigned char lineIndex)
+{
+	return lines[lineIndex];
 }
 
 bool Set::checkBalance()

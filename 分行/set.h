@@ -73,6 +73,8 @@ public:
 	Coordinates find(unsigned short weight, unsigned char offset = 0);
 	unsigned short getTotolWeight();
 
+	Point& operator[](unsigned char index);
+
 private:
 	unsigned short totolWeight = 0;
 	unsigned char number = 0;
@@ -89,6 +91,8 @@ public:
 	void add(std::string name, unsigned char weight = 1);
 	void build();
 	void rand();
+
+	Line& operator[](unsigned char lineIndex);
 
 private:
 	bool checkBalance();
