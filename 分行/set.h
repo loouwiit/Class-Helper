@@ -43,16 +43,20 @@ public:
 	unsigned char getWeight() { return weight; }
 	void setWeight(unsigned char weight) { this->weight = weight; }
 
+	std::string getName() { return name; }
+	void setName(std::string name) { this->name = name; }
+
 	void setLast(Point* lastPoint) { this->lastPoint = lastPoint; }
 	void setNext(Point* nextPoint) { this->nextPoint = nextPoint; }
 	Point* getLast() { return this->lastPoint; }
 	Point* getNext() { return this->nextPoint; }
 
-	Point& operator=(Point point) { weight = point.weight; }
-	void operator|(Point& point) { unsigned char selfweight = weight; weight = point.weight; point.weight = selfweight; } //交换数值
+	Point& operator=(Point point) { weight = point.weight; name = point.name; }
+	void operator|(Point& point) { unsigned char selfweight = weight; weight = point.weight; point.weight = selfweight; name.swap(point.name); } //交换数值
 
 private:
 	unsigned char weight = 1;
+	std::string name;
 	Point* nextPoint = nullptr;
 	Point* lastPoint = nullptr;
 };
@@ -62,7 +66,7 @@ class Line
 public:
 	~Line();
 
-	void add(unsigned char weight);
+	void add(std::string name, unsigned char weight);
 	void clear();
 	void rand();
 	void exchange(Coordinate selfCoordinate, Line& targetLine, Coordinate targetCoordinate);

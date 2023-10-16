@@ -92,7 +92,7 @@ Line::~Line()
 	head.setLast(nullptr);
 }
 
-void Line::add(unsigned char weight)
+void Line::add(std::string name, unsigned char weight)
 {
 	number++;
 	totolWeight = 0;
@@ -104,6 +104,7 @@ void Line::add(unsigned char weight)
 	target = target->getNext();
 	head.setLast(target);
 	target->setWeight(weight);
+	target->setName(name);
 }
 
 void Line::clear()
@@ -308,7 +309,7 @@ void Set::build()
 	//添加每一个点
 	for (unsigned short i = 0; i < pointNumber; i++)
 	{
-		lines[i % lineNumber].add(weights[i]);
+		lines[i % lineNumber].add(names[i], weights[i]);
 	}
 
 	if (!checkBalance()) balance();
@@ -317,8 +318,6 @@ void Set::build()
 
 void Set::rand()
 {
-	if (!checkBalance()) balance();
-
 	unsigned short swapWeight = 0;
 	unsigned short totolCoordinateNumber = 0;
 	unsigned char* lineCooridinateNumber = new unsigned char[lineNumber]; //由deconstructLineCooridinateNumber回收
