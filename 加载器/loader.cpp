@@ -16,7 +16,7 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
 using Function = Interface::Function;
 
-constexpr int text_Nunber = 3;
+constexpr int text_Nunber = 4;
 
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
@@ -38,16 +38,22 @@ DLL void* init(void* self)
 	text[0].set_Text(L"退出程序");
 
 	text[1].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[1].set_Position((float)(1920 / 2), (float)(1080 / 2 - 50));
+	text[1].set_Position((float)(1920 / 2), (float)(1080 / 2 - 100));
 	text[1].set_Default_Color(sf::Color(0x0));
 	text[1].set_High_Light_Color(sf::Color(0x33333366));
 	text[1].set_Text(L"加载seat.dll");
 
 	text[2].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text[2].set_Position((float)(1920 / 2), (float)(1080 / 2 + 50));
+	text[2].set_Position((float)(1920 / 2), (float)(1080 / 2 + 0));
 	text[2].set_Default_Color(sf::Color(0x0));
 	text[2].set_High_Light_Color(sf::Color(0x33333366));
 	text[2].set_Text(L"加载sanitation.dll");
+
+	text[3].get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text[3].set_Position((float)(1920 / 2), (float)(1080 / 2 + 100));
+	text[3].set_Default_Color(sf::Color(0x0));
+	text[3].set_High_Light_Color(sf::Color(0x33333366));
+	text[3].set_Text(L"加载line.dll");
 
 	return nullptr;
 }
@@ -160,6 +166,12 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	if (text[2].is_Clicked({ (float)mouse.x,(float)mouse.y }))
 	{
 		self->set_Next_Dll(".\\dll\\sanitation.dll");
+		ened();
+	}
+
+	if (text[3].is_Clicked({ (float)mouse.x,(float)mouse.y }))
+	{
+		self->set_Next_Dll(".\\dll\\line.dll");
 		ened();
 	}
 }
