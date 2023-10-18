@@ -92,7 +92,7 @@ Line::~Line()
 	head.setLast(nullptr);
 }
 
-void Line::add(std::string name, unsigned char weight)
+void Line::add(std::wstring name, unsigned char weight)
 {
 	number++;
 	totolWeight = 0;
@@ -239,6 +239,11 @@ unsigned short Line::getTotolWeight()
 	return totolWeight;
 }
 
+unsigned char Line::getNumber()
+{
+	return number;
+}
+
 Point& Line::operator[](unsigned char index)
 {
 	Point* target = head.getNext();
@@ -266,6 +271,21 @@ void Set::setLineNumber(unsigned char number)
 	lines = new Line[lineNumber];
 }
 
+unsigned char Set::getLineNumber()
+{
+	return lineNumber;
+}
+
+unsigned short Set::getTotolWeight()
+{
+	return totolWeight;
+}
+
+unsigned short Set::getTotolNumber()
+{
+	return pointNumber;
+}
+
 void Set::setPointReserverNumber(unsigned char number)
 {
 	if (pointLenght != 0)
@@ -274,17 +294,17 @@ void Set::setPointReserverNumber(unsigned char number)
 		delete[] weights;
 	}
 	pointLenght = number;
-	names = new std::string[pointLenght];
+	names = new std::wstring[pointLenght];
 	weights = new unsigned char[pointLenght];
 }
 
-void Set::add(std::string name, unsigned char weight)
+void Set::add(std::wstring name, unsigned char weight)
 {
 	if (pointNumber >= pointLenght)
 	{
 		//重新分配内存
 		pointLenght += CooridinateAllocateStep;
-		std::string* tempName = new std::string[pointLenght];
+		std::wstring* tempName = new std::wstring[pointLenght];
 		unsigned char* tempWeight = new unsigned char[pointLenght];
 		for (unsigned char i = 0; i < pointNumber; i++)
 		{
@@ -528,12 +548,85 @@ void Element::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	text.draw(target, states);
 }
 
+//element line
+
+ElementLine::~ElementLine()
+{
+	elementNumber = 0;
+	if (elements != nullptr)
+	{
+		delete[] elements;
+		elements = nullptr;
+	}
+}
+
+void ElementLine::load(Line& line)
+{
+	elementNumber = line.getTotolWeight();
+	unsigned char linePointNumber = line.getNumber();
+	unsigned short index = 0;
+
+	if (elements != nullptr) delete[] elements;
+	elements = new Element[elementNumber];
+
+	Point* target = &line[0];
+	unsigned char targetWeight = 0;
+	std::wstring targetName;
+	for (unsigned char point = 0; point < linePointNumber; point++)
+	{
+		targetWeight = target->getWeight();
+		targetName = target->getName();
+		for (unsigned char j = 0; j < targetWeight; j++)
+		{
+			elements[index].setName(targetName);
+			elements[index].setPosition(sf::Vector2f((float)rand() / RAND_MAX * 10, (float)rand() / RAND_MAX * 10));
+			index++;
+		}
+		target = target->getNext();
+	}
+}
+
+void ElementLine::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	states.transform *= transform.getTransform();
+	for (unsigned char i = 0; i < elementNumber; i++)
+		target.draw(elements[i], states);
+}
+
 //element set
+
+ElementSet::~ElementSet()
+{
+	totolWeight = 0;
+	totolNumber = 0;
+	lineNumber = 0;
+	if (elementLines != nullptr)
+	{
+		delete[] elementLines;
+		elementLines = nullptr;
+	}
+}
 
 void ElementSet::setPosition(sf::Vector2f position)
 {
 	transform.setPosition(position);
 }
 
-void ElementSet::draw(sf::RenderTarget & target, sf::RenderStates states) const
-{}
+void ElementSet::load(Set& set)
+{
+	totolWeight = set.getTotolWeight();
+	totolNumber = set.getTotolNumber();
+	lineNumber = set.getLineNumber();
+
+	delete[] elementLines;
+	elementLines = new ElementLine[lineNumber];
+	for (unsigned char i = 0; i < lineNumber; i++)
+		elementLines[i].load(set[i]);
+}
+
+void ElementSet::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	states.transform *= transform.getTransform();
+	for (unsigned char i = 0; i < lineNumber; i++)
+		target.draw(elementLines[i], states);
+}

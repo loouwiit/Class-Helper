@@ -43,8 +43,8 @@ public:
 	unsigned char getWeight() { return weight; }
 	void setWeight(unsigned char weight) { this->weight = weight; }
 
-	std::string getName() { return name; }
-	void setName(std::string name) { this->name = name; }
+	std::wstring getName() { return name; }
+	void setName(std::wstring name) { this->name = name; }
 
 	void setLast(Point* lastPoint) { this->lastPoint = lastPoint; }
 	void setNext(Point* nextPoint) { this->nextPoint = nextPoint; }
@@ -56,7 +56,7 @@ public:
 
 private:
 	unsigned char weight = 1;
-	std::string name;
+	std::wstring name;
 	Point* nextPoint = nullptr;
 	Point* lastPoint = nullptr;
 };
@@ -66,12 +66,13 @@ class Line
 public:
 	~Line();
 
-	void add(std::string name, unsigned char weight);
+	void add(std::wstring name, unsigned char weight);
 	void clear();
 	void rand();
 	void exchange(Coordinate selfCoordinate, Line& targetLine, Coordinate targetCoordinate);
 	Coordinates find(unsigned short weight, unsigned char offset = 0);
 	unsigned short getTotolWeight();
+	unsigned char getNumber();
 
 	Point& operator[](unsigned char index);
 
@@ -87,8 +88,11 @@ public:
 	~Set();
 
 	void setLineNumber(unsigned char number);
+	unsigned char getLineNumber();
+	unsigned short getTotolWeight();
+	unsigned short getTotolNumber();
 	void setPointReserverNumber(unsigned char number);
-	void add(std::string name, unsigned char weight = 1);
+	void add(std::wstring name, unsigned char weight = 1);
 	void build();
 	void rand();
 
@@ -104,7 +108,7 @@ private:
 	unsigned char pointNumber = 0;
 	unsigned char pointLenght = 0;
 	Line* lines = nullptr; //Êý×éÖ¸Õë
-	std::string* names = nullptr;
+	std::wstring* names = nullptr;
 	unsigned char* weights = nullptr;
 };
 
@@ -123,18 +127,35 @@ private:
 	Button_Text text;
 };
 
-class ElementSet : sf::Drawable
+class ElementLine : public sf::Drawable
 {
 public:
-	void setPosition(sf::Vector2f position);
+	~ElementLine();
+	void load(Line& line);
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	char totolWeight = 0;
-	char totolNumber = 0;
+	unsigned char elementNumber = 0;
 	Element* elements = nullptr;
-	Button_Text totolText;
+	sf::Transformable transform;
+};
+
+class ElementSet : public sf::Drawable
+{
+public:
+	~ElementSet();
+	void setPosition(sf::Vector2f position);
+	void load(Set& set);
+
+protected:
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+private:
+	unsigned short totolWeight = 0;
+	unsigned short totolNumber = 0;
+	unsigned char lineNumber = 0;
+	ElementLine* elementLines = nullptr;
 	sf::Transformable transform;
 };

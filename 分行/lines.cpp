@@ -13,6 +13,7 @@ Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
 sf::Color background_Color = sf::Color(0x000000FF);
 Set set;
+ElementSet elementSet;
 
 void ened();
 void event_Key(sf::Event::KeyEvent key);
@@ -38,22 +39,27 @@ DLL void* init(void* self)
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Exit.set_Text(L"ÍË³öline.dll");
 
-	test[0].setName("TEST");
+	test[0].setName(L"TEST");
 	test[0].setPosition({ 900,100 });
 	test[1].setName("1st");
 	test[1].setPosition({ 900,150 });
 	test[2].setName("2nd");
 	test[2].setPosition({ 900,200 });
 
+	printf("line::init: set initing\n");
 	set.setLineNumber(3);
-	set.add("A", 3);
-	set.add("B", 2);
-	set.add("C", 2);
-	set.add("D", 1);
-	set.add("E", 1);
-	set.add("F", 2);
+	set.add(L"A", 3);
+	set.add(L"B", 2);
+	set.add(L"C", 2);
+	set.add(L"D", 1);
+	set.add(L"E", 1);
+	set.add(L"F", 2);
 	set.build();
 	set.rand();
+	printf("line::init: set randed\n");
+	
+	elementSet.load(set);
+	printf("line::init: set loaded\n");
 	
 	return nullptr;
 }
@@ -99,6 +105,7 @@ DLL void* draw(void* null)
 {
 	texture->clear(background_Color);
 	texture->draw(text_Exit);
+	texture->draw(elementSet);
 	for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
 }
