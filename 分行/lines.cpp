@@ -20,7 +20,7 @@ void event_Key(sf::Event::KeyEvent key);
 void event_Mouse(sf::Event::MouseMoveEvent mouse);
 void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
-Element test[3];
+//Element test[3];
 Button_Text text_Exit;
 
 DLL void* init(void* self)
@@ -39,12 +39,12 @@ DLL void* init(void* self)
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Exit.set_Text(L"ÍË³öline.dll");
 
-	test[0].setName(L"TEST");
-	test[0].setPosition({ 900,100 });
-	test[1].setName("1st");
-	test[1].setPosition({ 900,150 });
-	test[2].setName("2nd");
-	test[2].setPosition({ 900,200 });
+	//test[0].setName(L"100,100");
+	//test[0].setPosition({ 100,100 });
+	//test[1].setName("100,200");
+	//test[1].setPosition({ 100,200 });
+	//test[2].setName("200,100");
+	//test[2].setPosition({ 200,100 });
 
 	printf("line::init: set initing\n");
 	set.setLineNumber(3);
@@ -59,6 +59,8 @@ DLL void* init(void* self)
 	printf("line::init: set randed\n");
 	
 	elementSet.load(set);
+	elementSet.setPosition({ 100,100 });
+	elementSet.setSize({ 1920 - 200, 1080 - 200 });
 	printf("line::init: set loaded\n");
 	
 	return nullptr;
@@ -106,7 +108,7 @@ DLL void* draw(void* null)
 	texture->clear(background_Color);
 	texture->draw(text_Exit);
 	texture->draw(elementSet);
-	for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
+	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
 }
 

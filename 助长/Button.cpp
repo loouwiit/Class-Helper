@@ -43,8 +43,8 @@ void Button_Text::init()
 
 void Button_Text::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(self_Rectangle);
-	target.draw(self_Text);
+	target.draw(self_Rectangle, states);
+	target.draw(self_Text, states);
 }
 
 bool Button_Text::is_Clicked(sf::Vector2f position)

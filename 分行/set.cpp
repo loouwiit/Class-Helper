@@ -545,7 +545,8 @@ void Element::setPosition(sf::Vector2f position)
 
 void Element::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	text.draw(target, states);
+	target.draw(text, states);
+	//text.draw(target, states);
 }
 
 //element line
@@ -579,10 +580,28 @@ void ElementLine::load(Line& line)
 		for (unsigned char j = 0; j < targetWeight; j++)
 		{
 			elements[index].setName(targetName);
-			elements[index].setPosition(sf::Vector2f((float)rand() / RAND_MAX * 10, (float)rand() / RAND_MAX * 10));
+			//elements[index].setPosition(sf::Vector2f((float)rand() / RAND_MAX * 10, (float)rand() / RAND_MAX * 10));
 			index++;
 		}
 		target = target->getNext();
+	}
+}
+
+void ElementLine::setPosition(sf::Vector2f position)
+{
+	transform.setPosition(position);
+}
+
+void ElementLine::setSize(sf::Vector2f size)
+{
+	sf::Vector2f position = { 0,0 };
+	sf::Vector2f delta = { size.x,size.y / elementNumber };
+
+	for (unsigned char i = 0; i < elementNumber; i++)
+	{
+		elements[i].setPosition(position);
+		//elements[i].setPosition({ (float)(::rand() % 1000), (float)(::rand() % 1000) });
+		position.y += delta.y;
 	}
 }
 
@@ -612,6 +631,12 @@ void ElementSet::setPosition(sf::Vector2f position)
 	transform.setPosition(position);
 }
 
+void ElementSet::setSize(sf::Vector2f size)
+{
+	this->size = size;
+	arrange();
+}
+
 void ElementSet::load(Set& set)
 {
 	totolWeight = set.getTotolWeight();
@@ -622,6 +647,7 @@ void ElementSet::load(Set& set)
 	elementLines = new ElementLine[lineNumber];
 	for (unsigned char i = 0; i < lineNumber; i++)
 		elementLines[i].load(set[i]);
+	arrange();
 }
 
 void ElementSet::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -629,4 +655,17 @@ void ElementSet::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	states.transform *= transform.getTransform();
 	for (unsigned char i = 0; i < lineNumber; i++)
 		target.draw(elementLines[i], states);
+}
+
+void ElementSet::arrange()
+{
+	sf::Vector2f position = { 0,0 };
+	sf::Vector2f delta = { size.x / lineNumber,size.y };
+
+	for (unsigned char i = 0; i < lineNumber; i++)
+	{
+		elementLines[i].setPosition(position);
+		elementLines[i].setSize(delta);
+		position.x += delta.x;
+	}
 }

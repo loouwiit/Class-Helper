@@ -132,6 +132,8 @@ class ElementLine : public sf::Drawable
 public:
 	~ElementLine();
 	void load(Line& line);
+	void setPosition(sf::Vector2f position);
+	void setSize(sf::Vector2f size);
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -147,12 +149,17 @@ class ElementSet : public sf::Drawable
 public:
 	~ElementSet();
 	void setPosition(sf::Vector2f position);
+	void setSize(sf::Vector2f size);
 	void load(Set& set);
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
+	void arrange();
+
+	sf::Vector2f size;
+
 	unsigned short totolWeight = 0;
 	unsigned short totolNumber = 0;
 	unsigned char lineNumber = 0;
