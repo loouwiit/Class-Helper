@@ -169,6 +169,10 @@ void Line::exchange(Coordinate selfCoordinate, Line& targetLine, Coordinate targ
 	beside = self->getNext();
 	self->setNext(target->getNext());
 	target->setNext(beside);
+
+	char delta = targetCoordinate.lenght - selfCoordinate.lenght;
+	number += delta;
+	targetLine.exchanged(-delta);
 }
 
 Coordinates Line::find(unsigned short weight, unsigned char offset)
@@ -244,12 +248,29 @@ unsigned char Line::getNumber()
 	return number;
 }
 
+void Line::debug()
+{
+	printf("Line::debug: start\n");
+	Point* point = head.getNext();
+	for (unsigned char i = 0; i < number; i++)
+	{
+		printf("\tpoint[%d] = { %d, %s }\n", i, point->getWeight(), (const char*)point->getName().c_str());
+		point = point->getNext();
+	}
+	printf("Line::debug: finish\n");
+}
+
 Point& Line::operator[](unsigned char index)
 {
 	Point* target = head.getNext();
 	while (index > 0)
 		target = target->getNext();
 	return *target;
+}
+
+void Line::exchanged(char deltaNumber)
+{
+	number += deltaNumber;
 }
 
 //set
@@ -381,6 +402,17 @@ void Set::rand()
 	}
 }
 
+void Set::debug()
+{
+	printf("Set::debug: start\n");
+	for (unsigned char i = 0; i < lineNumber; i++)
+	{
+		printf("Set::debug: line %d\n", i);
+		lines[i].debug();
+	}
+	printf("Set::debug: finish\n");
+}
+
 Line& Set::operator[](unsigned char lineIndex)
 {
 	return lines[lineIndex];
@@ -471,20 +503,22 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 
 	printf("Set::swap: swap start\n");
 
+	debug();
+
 	for (unsigned char i = 0; i < lineNumber; i++)
 	{
 		printf("Set::swap: swap in %d line\n", i);
 
 		//对于自己的每一行
-		Coordinates& lineCoordinate = coordinates[i];
-		unsigned char& lineCoordinateCount = lineCooridinateNumber[i];
+		//Coordinates& lineCoordinate = coordinates[i];
+		//unsigned char& lineCoordinateCount = lineCooridinateNumber[i];
 
 		//计算潜在的交换数量
-		coordinateAviliableCount = totolCoordinateNumber - lineCoordinateCount;
+		coordinateAviliableCount = totolCoordinateNumber - lineCooridinateNumber[i];
 		if (coordinateAviliableCount == 0) continue;
 		
 		//可以交换
-		for (unsigned char j = 0; j < lineCoordinateCount; j++)
+		for (unsigned char j = 0; j < lineCooridinateNumber[i]; j++)
 		{
 			//对于每一行有对象的点
 
@@ -494,7 +528,7 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 			//寻找所在行数
 			if (i == 0) lineIndex = 1; //跳过自己
 			else lineIndex = 0;
-			while (randIndex > lineCooridinateNumber[lineIndex])
+			while (randIndex >= lineCooridinateNumber[lineIndex])
 			{
 				randIndex -= lineCooridinateNumber[lineIndex];
 				lineIndex++;
@@ -504,6 +538,8 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 
 			//交换二者
 			lines[i].exchange(coordinates[i][j], lines[lineIndex], coordinates[lineIndex][targetIndex]);
+
+			printf("Set::swap: exchange at [%d][%d] in %d elements\n\t\t  with [%d][%d] in %d elements\n", i, coordinates[i][j].position, coordinates[i][j].lenght, lineIndex, coordinates[lineIndex][targetIndex].position, coordinates[lineIndex][targetIndex].lenght);
 
 			//重新计算二者的交换数据
 			totolCoordinateNumber -= lineCooridinateNumber[i];
@@ -516,12 +552,18 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 			lineCooridinateNumber[lineIndex] = coordinates[lineIndex].getNumber();
 			totolCoordinateNumber += lineCooridinateNumber[lineIndex];
 
+			coordinateAviliableCount = totolCoordinateNumber - lineCooridinateNumber[i];
+
+			debug();
+
 			//[optimize][优化]
 			//此处的find用来寻找所有解
 			//可以定制为特定解，同时还可以有选择的跳过部分重复项
 			//但优化以后再说，慢个三五分钟不是大问题
 		}
 	}
+
+	debug();
 
 	printf("Set::swap: swap finish\n");
 }

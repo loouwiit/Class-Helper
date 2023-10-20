@@ -22,6 +22,7 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse);
 
 //Element test[3];
 Button_Text text_Exit;
+Button_Text text_Rand;
 
 DLL void* init(void* self)
 {
@@ -39,6 +40,13 @@ DLL void* init(void* self)
 	text_Exit.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Exit.set_Text(L"退出line.dll");
 
+	text_Rand.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Rand.set_Position((float)(1920 - 50), (float)(1080 - 150));
+	text_Rand.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Rand.set_Default_Color(sf::Color(0x000000FF));
+	text_Rand.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Rand.set_Text(L"随机排列");
+
 	//test[0].setName(L"100,100");
 	//test[0].setPosition({ 100,100 });
 	//test[1].setName("100,200");
@@ -49,11 +57,14 @@ DLL void* init(void* self)
 	printf("line::init: set initing\n");
 	set.setLineNumber(3);
 	set.add(L"A", 3);
-	set.add(L"B", 2);
+	set.add(L"B", 3);
 	set.add(L"C", 2);
-	set.add(L"D", 1);
-	set.add(L"E", 1);
+	set.add(L"J", 1);
+	set.add(L"D", 2);
+	set.add(L"E", 2);
 	set.add(L"F", 2);
+	set.add(L"G", 2);
+	set.add(L"H", 2);
 	set.build();
 	set.rand();
 	printf("line::init: set randed\n");
@@ -107,6 +118,7 @@ DLL void* draw(void* null)
 {
 	texture->clear(background_Color);
 	texture->draw(text_Exit);
+	texture->draw(text_Rand);
 	texture->draw(elementSet);
 	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
@@ -144,6 +156,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	sf::Vector2f mouse_f{ (float)mouse.x, (float)mouse.y };
 
 	text_Exit.set_High_Light(text_Exit.is_Clicked(mouse_f));
+	text_Rand.set_High_Light(text_Rand.is_Clicked(mouse_f));
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
@@ -155,5 +168,11 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	{
 		self->set_Next_Dll(".\\dll\\loader.dll");
 		ened();
+	}
+
+	if (text_Rand.is_Clicked(mouse_f))
+	{
+		set.rand();
+		elementSet.load(set);
 	}
 }

@@ -74,7 +74,12 @@ public:
 	unsigned short getTotolWeight();
 	unsigned char getNumber();
 
+	void debug();
+
 	Point& operator[](unsigned char index);
+
+protected:
+	void exchanged(char deltaNumber);
 
 private:
 	unsigned short totolWeight = 0;
@@ -95,6 +100,7 @@ public:
 	void add(std::wstring name, unsigned char weight = 1);
 	void build();
 	void rand();
+	void debug();
 
 	Line& operator[](unsigned char lineIndex);
 
