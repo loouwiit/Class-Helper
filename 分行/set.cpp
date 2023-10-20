@@ -513,8 +513,8 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 		//Coordinates& lineCoordinate = coordinates[i];
 		//unsigned char& lineCoordinateCount = lineCooridinateNumber[i];
 
-		//计算潜在的交换数量
-		coordinateAviliableCount = totolCoordinateNumber - lineCooridinateNumber[i];
+		//计算潜在的交换数量 1是自己不动
+		coordinateAviliableCount = totolCoordinateNumber - lineCooridinateNumber[i] + 1;
 		if (coordinateAviliableCount == 0) continue;
 		
 		//可以交换
@@ -524,6 +524,8 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 
 			//生成交换目标 
 			randIndex = ::rand() % coordinateAviliableCount; //不包含自己行中的
+			if (randIndex == 0) continue; //自己，不用动
+			else randIndex--;
 
 			//寻找所在行数
 			if (i == 0) lineIndex = 1; //跳过自己
