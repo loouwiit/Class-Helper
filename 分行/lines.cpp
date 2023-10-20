@@ -14,6 +14,7 @@ sf::RenderTexture* texture;
 sf::Color background_Color = sf::Color(0x000000FF);
 Set set;
 ElementSet elementSet;
+bool autoRanding = false;
 
 void ened();
 void event_Key(sf::Event::KeyEvent key);
@@ -23,6 +24,7 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse);
 //Element test[3];
 Button_Text text_Exit;
 Button_Text text_Rand;
+Button_Text text_Auto;
 
 DLL void* init(void* self)
 {
@@ -41,11 +43,18 @@ DLL void* init(void* self)
 	text_Exit.set_Text(L"退出line.dll");
 
 	text_Rand.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Rand.set_Position((float)(1920 - 50), (float)(1080 - 150));
+	text_Rand.set_Position((float)(1920 - 50), (float)(1080 - 100));
 	text_Rand.set_Alignment(Button_Text::Alignment::Right); //右对齐
 	text_Rand.set_Default_Color(sf::Color(0x000000FF));
 	text_Rand.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Rand.set_Text(L"随机排列");
+
+	text_Auto.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Auto.set_Position((float)(1920 - 50), (float)(1080 - 150));
+	text_Auto.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Auto.set_Default_Color(sf::Color(0x000000FF));
+	text_Auto.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Auto.set_Text(L"自动重排");
 
 	//test[0].setName(L"100,100");
 	//test[0].setPosition({ 100,100 });
@@ -112,13 +121,22 @@ DLL void* event(void* param)
 	return nullptr;
 }
 
-DLL void* compute(void* null) { return nullptr; }
+DLL void* compute(void* null)
+{
+	if (autoRanding)
+	{
+		set.rand();
+		elementSet.load(set);
+	}
+	return nullptr;
+}
 
 DLL void* draw(void* null)
 {
 	texture->clear(background_Color);
 	texture->draw(text_Exit);
 	texture->draw(text_Rand);
+	texture->draw(text_Auto);
 	texture->draw(elementSet);
 	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
@@ -157,6 +175,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 
 	text_Exit.set_High_Light(text_Exit.is_Clicked(mouse_f));
 	text_Rand.set_High_Light(text_Rand.is_Clicked(mouse_f));
+	text_Auto.set_High_Light(text_Auto.is_Clicked(mouse_f) ^ autoRanding);
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
@@ -174,5 +193,11 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	{
 		set.rand();
 		elementSet.load(set);
+	}
+
+	if (text_Auto.is_Clicked(mouse_f))
+	{
+		autoRanding = !autoRanding;
+		printf("Set::event: auto randing is %s\n", autoRanding ? "open" : "close");
 	}
 }
