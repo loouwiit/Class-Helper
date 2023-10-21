@@ -27,6 +27,7 @@ Button_Text text_Rand;
 Button_Text text_Auto;
 Button_Text text_Big;
 Button_Text text_Small;
+Button_Text text_Save;
 
 DLL void* init(void* self)
 {
@@ -71,6 +72,13 @@ DLL void* init(void* self)
 	text_Small.set_Default_Color(sf::Color(0x000000FF));
 	text_Small.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Small.set_Text(L"¼õÉÙ×ÖºÅ");
+
+	text_Save.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Save.set_Position((float)(1920 - 50), (float)(1080 - 300));
+	text_Save.set_Alignment(Button_Text::Alignment::Right); //ÓÒ¶ÔÆë
+	text_Save.set_Default_Color(sf::Color(0x000000FF));
+	text_Save.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Save.set_Text(L"±£´æÍ¼Æ¬");
 
 	//test[0].setName(L"100,100");
 	//test[0].setPosition({ 100,100 });
@@ -155,6 +163,7 @@ DLL void* draw(void* null)
 	texture->draw(text_Auto);
 	texture->draw(text_Big);
 	texture->draw(text_Small);
+	texture->draw(text_Save);
 	texture->draw(elementSet);
 	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
@@ -196,6 +205,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	text_Auto.set_High_Light(text_Auto.is_Clicked(mouse_f) ^ autoRanding);
 	text_Big.set_High_Light(text_Big.is_Clicked(mouse_f));
 	text_Small.set_High_Light(text_Small.is_Clicked(mouse_f));
+	text_Save.set_High_Light(text_Save.is_Clicked(mouse_f));
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
@@ -229,5 +239,16 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	{
 		autoRanding = !autoRanding;
 		printf("Set::event: auto randing is %s\n", autoRanding ? "open" : "close");
+	}
+
+	if (text_Save.is_Clicked(mouse_f))
+	{
+		sf::RenderTexture save;
+		sf::Sprite sprite;
+		sprite.setTexture(texture->getTexture());
+		save.create(1920, 1080);
+		save.draw(sprite);
+		save.getTexture().copyToImage().saveToFile(".\\resources\\line\\line.png");
+		printf("Set::event: save\n");
 	}
 }
