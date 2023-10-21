@@ -67,6 +67,11 @@ void Button_Text::set_Font(sf::Font font)
 	self_Font = font;
 }
 
+unsigned int Button_Text::get_Default_Text_Size()
+{
+	return 30; //根据sf::Text::setCharacterSize得知
+}
+
 sf::Font Button_Text::get_Font()
 {
 	return self_Font;
@@ -80,6 +85,12 @@ sf::Text& Button_Text::get_Text()
 void Button_Text::set_Text(const sf::String& string)
 {
 	self_Text.setString(string);
+	init();
+}
+
+void Button_Text::set_Text_Size(const unsigned int size)
+{
+	self_Text.setCharacterSize(size);
 	init();
 }
 

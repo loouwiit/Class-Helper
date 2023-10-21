@@ -587,6 +587,11 @@ void Element::setPosition(sf::Vector2f position)
 	text.set_Position(position);
 }
 
+void Element::setTextSize(unsigned int size)
+{
+	text.set_Text_Size(size);
+}
+
 void Element::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(text, states);
@@ -639,7 +644,7 @@ void ElementLine::setPosition(sf::Vector2f position)
 void ElementLine::setSize(sf::Vector2f size)
 {
 	sf::Vector2f position = { 0,0 };
-	sf::Vector2f delta = { size.x,size.y / elementNumber };
+	sf::Vector2f delta = { size.x,size.y / (elementNumber - 1) };
 
 	for (unsigned char i = 0; i < elementNumber; i++)
 	{
@@ -647,6 +652,12 @@ void ElementLine::setSize(sf::Vector2f size)
 		//elements[i].setPosition({ (float)(::rand() % 1000), (float)(::rand() % 1000) });
 		position.y += delta.y;
 	}
+}
+
+void ElementLine::setTextSize(unsigned int size)
+{
+	for (unsigned char i = 0; i < elementNumber; i++)
+		elements[i].setTextSize(size);
 }
 
 void ElementLine::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -694,6 +705,18 @@ void ElementSet::load(Set& set)
 	arrange();
 }
 
+void ElementSet::setTextSize(unsigned int size)
+{
+	textSize = size;
+	for (unsigned char i = 0; i < lineNumber; i++)
+		elementLines[i].setTextSize(size);
+}
+
+unsigned int ElementSet::getTextSize()
+{
+	return textSize;
+}
+
 void ElementSet::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	states.transform *= transform.getTransform();
@@ -704,7 +727,7 @@ void ElementSet::draw(sf::RenderTarget& target, sf::RenderStates states) const
 void ElementSet::arrange()
 {
 	sf::Vector2f position = { 0,0 };
-	sf::Vector2f delta = { size.x / lineNumber,size.y };
+	sf::Vector2f delta = { size.x / (lineNumber - 1),size.y };
 
 	for (unsigned char i = 0; i < lineNumber; i++)
 	{

@@ -28,10 +28,12 @@ public:
 	Button_Text();
 
 	static void set_Font(sf::Font font);
+	static unsigned int get_Default_Text_Size();
 	static sf::Font get_Font();
 
 	sf::Text& get_Text();
 	void set_Text(const sf::String& string);
+	void set_Text_Size(const unsigned int size);
 	void set_Position(const sf::Vector2f& position);
 	void set_Position(float x, float y);
 	void set_Alignment(Alignment alignment);

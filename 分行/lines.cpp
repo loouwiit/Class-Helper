@@ -25,6 +25,8 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse);
 Button_Text text_Exit;
 Button_Text text_Rand;
 Button_Text text_Auto;
+Button_Text text_Big;
+Button_Text text_Small;
 
 DLL void* init(void* self)
 {
@@ -56,6 +58,20 @@ DLL void* init(void* self)
 	text_Auto.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Auto.set_Text(L"自动重排");
 
+	text_Big.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Big.set_Position((float)(1920 - 50), (float)(1080 - 200));
+	text_Big.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Big.set_Default_Color(sf::Color(0x000000FF));
+	text_Big.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Big.set_Text(L"增大字号");
+
+	text_Small.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Small.set_Position((float)(1920 - 50), (float)(1080 - 250));
+	text_Small.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Small.set_Default_Color(sf::Color(0x000000FF));
+	text_Small.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Small.set_Text(L"减少字号");
+
 	//test[0].setName(L"100,100");
 	//test[0].setPosition({ 100,100 });
 	//test[1].setName("100,200");
@@ -65,22 +81,22 @@ DLL void* init(void* self)
 
 	printf("line::init: set initing\n");
 	set.setLineNumber(3);
-	set.add(L"A", 3);
-	set.add(L"B", 3);
-	set.add(L"C", 2);
-	set.add(L"J", 1);
-	set.add(L"D", 2);
-	set.add(L"E", 2);
-	set.add(L"F", 2);
-	set.add(L"G", 2);
-	set.add(L"H", 2);
+	set.add(L"0", 3);
+	set.add(L"8", 3);
+	set.add(L"1", 2);
+	set.add(L"3", 1);
+	set.add(L"2", 2);
+	set.add(L"4", 2);
+	set.add(L"5", 2);
+	set.add(L"6", 2);
+	set.add(L"7", 2);
 	set.build();
 	set.rand();
 	printf("line::init: set randed\n");
 	
 	elementSet.load(set);
 	elementSet.setPosition({ 100,100 });
-	elementSet.setSize({ 1920 - 200, 1080 - 200 });
+	elementSet.setSize({ 1720 - 200, 1080 - 200 });
 	printf("line::init: set loaded\n");
 	
 	return nullptr;
@@ -137,6 +153,8 @@ DLL void* draw(void* null)
 	texture->draw(text_Exit);
 	texture->draw(text_Rand);
 	texture->draw(text_Auto);
+	texture->draw(text_Big);
+	texture->draw(text_Small);
 	texture->draw(elementSet);
 	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
@@ -176,6 +194,8 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	text_Exit.set_High_Light(text_Exit.is_Clicked(mouse_f));
 	text_Rand.set_High_Light(text_Rand.is_Clicked(mouse_f));
 	text_Auto.set_High_Light(text_Auto.is_Clicked(mouse_f) ^ autoRanding);
+	text_Big.set_High_Light(text_Big.is_Clicked(mouse_f));
+	text_Small.set_High_Light(text_Small.is_Clicked(mouse_f));
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
@@ -193,6 +213,16 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 	{
 		set.rand();
 		elementSet.load(set);
+	}
+
+	if (text_Big.is_Clicked(mouse_f))
+	{
+		elementSet.setTextSize(elementSet.getTextSize() + 10);
+	}
+
+	if (text_Small.is_Clicked(mouse_f))
+	{
+		if (elementSet.getTextSize() > 20) elementSet.setTextSize(elementSet.getTextSize() - 10);
 	}
 
 	if (text_Auto.is_Clicked(mouse_f))

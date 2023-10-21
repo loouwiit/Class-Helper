@@ -125,6 +125,7 @@ public:
 	sf::String getName();
 
 	void setPosition(sf::Vector2f position);
+	void setTextSize(unsigned int size);
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -140,6 +141,7 @@ public:
 	void load(Line& line);
 	void setPosition(sf::Vector2f position);
 	void setSize(sf::Vector2f size);
+	void setTextSize(unsigned int size);
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -157,6 +159,8 @@ public:
 	void setPosition(sf::Vector2f position);
 	void setSize(sf::Vector2f size);
 	void load(Set& set);
+	void setTextSize(unsigned int size);
+	unsigned int getTextSize();
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -165,6 +169,7 @@ private:
 	void arrange();
 
 	sf::Vector2f size;
+	unsigned int textSize = Button_Text::get_Default_Text_Size();
 
 	unsigned short totolWeight = 0;
 	unsigned short totolNumber = 0;
