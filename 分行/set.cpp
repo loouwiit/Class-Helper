@@ -610,14 +610,20 @@ ElementLine::~ElementLine()
 	}
 }
 
-void ElementLine::load(Line& line)
+void ElementLine::load(Line& line, unsigned int textSize)
 {
-	elementNumber = line.getTotolWeight();
+	auto lineNumber = line.getTotolWeight();
 	unsigned char linePointNumber = line.getNumber();
 	unsigned short index = 0;
 
-	if (elements != nullptr) delete[] elements;
-	elements = new Element[elementNumber];
+	if (elementNumber != lineNumber)
+	{
+		elementNumber = lineNumber;
+		delete[] elements; //delete Ö§³Ö nullptr
+		elements = new Element[elementNumber];
+		for (unsigned char i = 0; i < elementNumber; i++)
+			elements[i].setTextSize(textSize);
+	}
 
 	Point* target = &line[0];
 	unsigned char targetWeight = 0;
@@ -696,12 +702,18 @@ void ElementSet::load(Set& set)
 {
 	totolWeight = set.getTotolWeight();
 	totolNumber = set.getTotolNumber();
-	lineNumber = set.getLineNumber();
+	auto LineNumber = set.getLineNumber();
 
-	delete[] elementLines;
-	elementLines = new ElementLine[lineNumber];
+	if (lineNumber != LineNumber)
+	{
+		lineNumber = LineNumber;
+		delete[] elementLines;
+		elementLines = new ElementLine[lineNumber];
+		printf("ElementSet::load: realloc ram\n");
+	}
+
 	for (unsigned char i = 0; i < lineNumber; i++)
-		elementLines[i].load(set[i]);
+		elementLines[i].load(set[i], textSize);
 	arrange();
 }
 

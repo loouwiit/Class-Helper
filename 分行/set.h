@@ -138,7 +138,7 @@ class ElementLine : public sf::Drawable
 {
 public:
 	~ElementLine();
-	void load(Line& line);
+	void load(Line& line, unsigned int textSize);
 	void setPosition(sf::Vector2f position);
 	void setSize(sf::Vector2f size);
 	void setTextSize(unsigned int size);
