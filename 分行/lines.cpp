@@ -221,6 +221,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	text_Big.set_High_Light(text_Big.is_Clicked(mouse_f));
 	text_Small.set_High_Light(text_Small.is_Clicked(mouse_f));
 	text_Save.set_High_Light(text_Save.is_Clicked(mouse_f));
+	text_Mode.set_High_Light(text_Mode.is_Clicked(mouse_f));
 }
 
 void event_Mouse(sf::Event::MouseButtonEvent mouse)
