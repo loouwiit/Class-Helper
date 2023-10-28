@@ -92,10 +92,19 @@ Line::~Line()
 	head.setLast(nullptr);
 }
 
+void Line::setLineNumber(unsigned char lineNumber)
+{
+	this->lineNumber = lineNumber;
+}
+
+unsigned char Line::getLineNumber()
+{
+	return lineNumber;
+}
+
 void Line::add(std::wstring name, unsigned char weight)
 {
 	number++;
-	totolWeight = 0;
 
 	Point* target = &head;
 	while (target->getNext() != nullptr) target = target->getNext();
@@ -105,6 +114,9 @@ void Line::add(std::wstring name, unsigned char weight)
 	head.setLast(target);
 	target->setWeight(weight);
 	target->setName(name);
+	target->setLastLine(lineNumber);
+	target->setLastPosition(totolWeight);
+	totolWeight += weight;
 }
 
 void Line::clear()
@@ -250,21 +262,24 @@ unsigned char Line::getNumber()
 
 void Line::debug()
 {
-	printf("Line::debug: start\n");
+	//printf("Line::debug: start\n");
 	Point* point = head.getNext();
 	for (unsigned char i = 0; i < number; i++)
 	{
-		printf("\tpoint[%d] = { %d, %s }\n", i, point->getWeight(), (const char*)point->getName().c_str());
+		printf(" (%d,\"%s\")", point->getWeight(), (const char*)point->getName().c_str());
 		point = point->getNext();
 	}
-	printf("Line::debug: finish\n");
+	//printf("Line::debug: finish\n");
 }
 
 Point& Line::operator[](unsigned char index)
 {
 	Point* target = head.getNext();
 	while (index > 0)
+	{
 		target = target->getNext();
+		index--;
+	}
 	return *target;
 }
 
@@ -290,6 +305,8 @@ void Set::setLineNumber(unsigned char number)
 	if (lineNumber != 0) delete[] lines;
 	lineNumber = number;
 	lines = new Line[lineNumber];
+	for (unsigned char i = 0; i < lineNumber; i++)
+		lines[i].setLineNumber(i);
 }
 
 unsigned char Set::getLineNumber()
@@ -365,8 +382,13 @@ void Set::build()
 	printf("Set::build: build finish\n");
 }
 
-void Set::rand()
+unsigned short Set::rand(RandRisist randRisist, unsigned short maxTimes)
 {
+	if (maxTimes == 0) return 0; //非法参数
+
+	bool randFinish = false;
+	unsigned short swapTimes = 1; //因为下面是小等于
+	unsigned short maxSwapWeight = 0;
 	unsigned short swapWeight = 0;
 	unsigned short totolCoordinateNumber = 0;
 	unsigned char* lineCooridinateNumber = new unsigned char[lineNumber]; //由deconstructLineCooridinateNumber回收
@@ -380,26 +402,40 @@ void Set::rand()
 	for (unsigned char i = 0; i < lineNumber; i--)
 	{
 		lineTotolNumber = lines[i].getTotolWeight();
-		if (lineTotolNumber > swapWeight) swapWeight = lineTotolNumber;
+		if (lineTotolNumber > maxSwapWeight) maxSwapWeight = lineTotolNumber;
 	}
-	swapWeight--;
+	maxSwapWeight--;
 
-	while (swapWeight > 0)
+	while (!randFinish && swapTimes <= maxTimes)
 	{
-		totolCoordinateNumber = 0;
-		//寻找所有可能的解
-		for (unsigned char i = 0; i < lineNumber; i++)
+		swapWeight = maxSwapWeight;
+		//进行每一种可能性的交换
+		while (swapWeight > 0)
 		{
-			coordinates[i] = lines[i].find(swapWeight);
-			lineCooridinateNumber[i] = coordinates[i].getNumber();
-			totolCoordinateNumber += lineCooridinateNumber[i];
+			totolCoordinateNumber = 0;
+			//寻找所有可能的解
+			for (unsigned char i = 0; i < lineNumber; i++)
+			{
+				coordinates[i] = lines[i].find(swapWeight);
+				lineCooridinateNumber[i] = coordinates[i].getNumber();
+				totolCoordinateNumber += lineCooridinateNumber[i];
+			}
+
+			//根据coordinates进行交换
+			swap(coordinates, lineCooridinateNumber, totolCoordinateNumber, swapWeight); //期间前三个参数均可能发生改变 不保证一致性
+
+			swapWeight--;
 		}
 
-		//根据coordinates进行交换
-		swap(coordinates, lineCooridinateNumber, totolCoordinateNumber, swapWeight); //期间前三个参数均可能发生改变 不保证一致性
-
-		swapWeight--;
+		debug();
+		//判断是否合理
+		swapTimes++;
+		randFinish = checkRand(randRisist);
 	}
+
+	swapTimes--;
+	if (!randFinish) printf("Set::rand: rand filed in %d times\n", swapTimes);
+	return swapTimes;
 }
 
 void Set::debug()
@@ -407,8 +443,9 @@ void Set::debug()
 	printf("Set::debug: start\n");
 	for (unsigned char i = 0; i < lineNumber; i++)
 	{
-		printf("Set::debug: line %d\n", i);
+		printf("\tline %d:", i);
 		lines[i].debug();
+		printf("\n");
 	}
 	printf("Set::debug: finish\n");
 }
@@ -501,13 +538,13 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 	unsigned char lineIndex = 0;
 	unsigned char targetIndex = 0;
 
-	printf("Set::swap: swap start\n");
+	//printf("Set::swap: swap start\n");
 
-	debug();
+	//debug();
 
 	for (unsigned char i = 0; i < lineNumber; i++)
 	{
-		printf("Set::swap: swap in %d line\n", i);
+		//printf("Set::swap: swap in %d line\n", i);
 
 		//对于自己的每一行
 		//Coordinates& lineCoordinate = coordinates[i];
@@ -541,7 +578,7 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 			//交换二者
 			lines[i].exchange(coordinates[i][j], lines[lineIndex], coordinates[lineIndex][targetIndex]);
 
-			printf("Set::swap: exchange at [%d][%d] in %d elements\n\t\t  with [%d][%d] in %d elements\n", i, coordinates[i][j].position, coordinates[i][j].lenght, lineIndex, coordinates[lineIndex][targetIndex].position, coordinates[lineIndex][targetIndex].lenght);
+			//printf("Set::swap: exchange at [%d][%d] in %d elements\n\t\t  with [%d][%d] in %d elements\n", i, coordinates[i][j].position, coordinates[i][j].lenght, lineIndex, coordinates[lineIndex][targetIndex].position, coordinates[lineIndex][targetIndex].lenght);
 
 			//重新计算二者的交换数据
 			totolCoordinateNumber -= lineCooridinateNumber[i];
@@ -556,7 +593,7 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 
 			coordinateAviliableCount = totolCoordinateNumber - lineCooridinateNumber[i];
 
-			debug();
+			//debug();
 
 			//[optimize][优化]
 			//此处的find用来寻找所有解
@@ -565,9 +602,73 @@ void Set::swap(Coordinates* coordinates, unsigned char* lineCooridinateNumber, u
 		}
 	}
 
-	debug();
+	//debug();
 
-	printf("Set::swap: swap finish\n");
+	//printf("Set::swap: swap finish\n");
+}
+
+bool Set::checkRand(RandRisist randRisist)
+{
+	//列检测
+	if (randRisist && RandRisist::DifferLine)
+	{
+		unsigned char linePointNumber = 0;
+		for (unsigned char i =0;i<lineNumber;i++)
+		{
+			//每一行
+			linePointNumber = lines[i].getNumber();
+			Line& line = lines[i];
+			for (unsigned char j = 0; j < linePointNumber; j++)
+			{
+				//每一个的列不同于上一次
+				if (line[j].getLastLine() == i)
+				{
+					printf("Set::checkRand: line test filed at (%d, %d)\n", i, j);
+					return false;
+				}
+			}
+		}
+	}
+
+	//行检测
+	if (randRisist && RandRisist::DifferRow)
+	{
+		unsigned char weight = 0;
+		unsigned char linePointNumber = 0;
+		unsigned short lastPosition = 0;
+		unsigned short nowPosition = 0;
+		unsigned short nextPosition = 0;
+		for (unsigned char i = 0; i < lineNumber; i++)
+		{
+			//每一行
+			linePointNumber = lines[i].getNumber();
+			nowPosition = 0; //位置归零
+			nextPosition = 0;
+			Line& line = lines[i];
+			//[optimize][优化]
+			//此处可以用Point*逐个查找，提升性能
+			for (unsigned char j = 0; j < linePointNumber; j++)
+			{
+				weight = line[j].getWeight();
+				nowPosition = nextPosition; //上一次的next是这一次的now
+				nextPosition += weight;
+				lastPosition = line[j].getLastPosition();
+
+				//每一个的行不于上一次相交
+				//if (lastPosition + weight < nowPosition ||
+				//	nextPosition < lastPosition ||
+				//	weight == 0) continue;
+				if (lastPosition != nowPosition) continue;
+				else
+				{
+					printf("Set::checkRand: row test filed at (%d, %d)\n", i, j);
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
 }
 
 //element

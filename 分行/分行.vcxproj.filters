@@ -48,4 +48,9 @@
   <ItemGroup>
     <Text Include="lines.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="set.inl">
+      <Filter>头文件</Filter>
+    </None>
+  </ItemGroup>
 </Project>

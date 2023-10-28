@@ -12,6 +12,7 @@ DLL void* draw(void* null);
 Interface_Dll* self = nullptr;
 sf::RenderTexture* texture;
 sf::Color background_Color = sf::Color(0x000000FF);
+Set::RandRisist randRisist = Set::RandRisist::DifferNone;
 Set set;
 ElementSet elementSet;
 bool autoRanding = false;
@@ -28,6 +29,7 @@ Button_Text text_Auto;
 Button_Text text_Big;
 Button_Text text_Small;
 Button_Text text_Save;
+Button_Text text_Mode;
 
 DLL void* init(void* self)
 {
@@ -80,6 +82,13 @@ DLL void* init(void* self)
 	text_Save.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Save.set_Text(L"保存图片");
 
+	text_Mode.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Mode.set_Position((float)(1920 - 50), (float)(1080 - 350));
+	text_Mode.set_Alignment(Button_Text::Alignment::Right); //右对齐
+	text_Mode.set_Default_Color(sf::Color(0x000000FF));
+	text_Mode.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Mode.set_Text(L"模式:纯随机");
+
 	//test[0].setName(L"100,100");
 	//test[0].setPosition({ 100,100 });
 	//test[1].setName("100,200");
@@ -99,7 +108,7 @@ DLL void* init(void* self)
 	set.add(L"6", 2);
 	set.add(L"7", 2);
 	set.build();
-	set.rand();
+	//set.rand();
 	printf("line::init: set randed\n");
 	
 	elementSet.load(set);
@@ -149,8 +158,13 @@ DLL void* compute(void* null)
 {
 	if (autoRanding)
 	{
-		set.rand();
+		unsigned short randTime = 0;
+		wchar_t name[12] = L"上次自动:失败";
+		randTime = set.rand(randRisist, 128);
+		if (randTime != 128)
+			swprintf(name, sizeof(name) / sizeof(name[0]), L"上次自动:%d次", randTime);
 		elementSet.load(set);
+		text_Rand.set_Text(name);
 	}
 	return nullptr;
 }
@@ -164,6 +178,7 @@ DLL void* draw(void* null)
 	texture->draw(text_Big);
 	texture->draw(text_Small);
 	texture->draw(text_Save);
+	texture->draw(text_Mode);
 	texture->draw(elementSet);
 	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
@@ -221,7 +236,12 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 
 	if (text_Rand.is_Clicked(mouse_f))
 	{
-		set.rand();
+		unsigned short randTime = 0;
+		wchar_t name[12] = L"上次重排:失败";
+		randTime = set.rand(randRisist, 1024);
+		if (randTime != 1024)
+			swprintf(name, sizeof(name) / sizeof(name[0]), L"上次重排:%d次", randTime);
+		text_Rand.set_Text(name);
 		elementSet.load(set);
 	}
 
@@ -250,5 +270,42 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 		save.draw(sprite);
 		save.getTexture().copyToImage().saveToFile(".\\resources\\line\\line.png");
 		printf("Set::event: save\n");
+	}
+
+	if (text_Mode.is_Clicked(mouse_f))
+	{
+		switch (randRisist)
+		{
+		case Set::RandRisist::DifferNone:
+		{
+			randRisist = Set::RandRisist::DifferLine;
+			text_Mode.set_Text(L"模式:不同列");
+			break;
+		}
+		case Set::RandRisist::DifferLine:
+		{
+			randRisist = Set::RandRisist::DifferRow;
+			text_Mode.set_Text(L"模式:不同行");
+			break;
+		}
+		case Set::RandRisist::DifferRow:
+		{
+			randRisist = Set::RandRisist::DifferLineAndRow;
+			text_Mode.set_Text(L"模式:异行列");
+			break;
+		}
+		case Set::RandRisist::DifferLineAndRow:
+		{
+			randRisist = Set::RandRisist::DifferNone;
+			text_Mode.set_Text(L"模式:纯随机");
+			break;
+		}
+		default:
+		{
+			printf("event_Mouse: textMode change: error mode %llx", (long long)randRisist);
+			text_Mode.set_Text(L"模式:错误");
+			break;
+		}
+		}
 	}
 }
