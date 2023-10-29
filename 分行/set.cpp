@@ -733,12 +733,14 @@ bool Set::checkRand(RandRisist randRisist)
 			Line& line = lines[i];
 			//[optimize][优化]
 			//此处可以用Point*逐个查找，提升性能
+			Point* point = &line[0];
 			for (unsigned char j = 0; j < linePointNumber; j++)
 			{
-				weight = line[j].getWeight();
+				weight = point->getWeight();
 				nowPosition = nextPosition; //上一次的next是这一次的now
 				nextPosition += weight;
-				lastPosition = line[j].getLastPosition();
+				lastPosition = point->getLastPosition();
+				point = point->getNext(); //切到下一个
 
 				//每一个的行不于上一次相交
 				//if (lastPosition + weight < nowPosition ||
