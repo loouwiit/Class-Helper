@@ -161,7 +161,8 @@
   <ItemGroup>
     <ClCompile Include="..\助长\Button.cpp" />
     <ClCompile Include="..\助长\Interface.cpp" />
-    <ClCompile Include="lines.cpp" />
+    <ClCompile Include="file.cpp" />
+    <ClCompile Include="line.cpp" />
     <ClCompile Include="set.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -169,13 +170,14 @@
     <ClInclude Include="..\助长\Interface.h" />
     <ClInclude Include="..\助长\resource.h" />
     <ClInclude Include="deconstructer.h" />
+    <ClInclude Include="file.h" />
     <ClInclude Include="set.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="lines.txt" />
+    <None Include="set.inl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="set.inl" />
+    <Text Include="..\助长\resources\line\line.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

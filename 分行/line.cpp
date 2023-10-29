@@ -17,6 +17,8 @@ Set set;
 ElementSet elementSet;
 bool autoRanding = false;
 
+void load();
+void save();
 void ened();
 void event_Key(sf::Event::KeyEvent key);
 void event_Mouse(sf::Event::MouseMoveEvent mouse);
@@ -28,6 +30,7 @@ Button_Text text_Rand;
 Button_Text text_Auto;
 Button_Text text_Big;
 Button_Text text_Small;
+Button_Text text_Save_Image;
 Button_Text text_Save;
 Button_Text text_Mode;
 
@@ -75,15 +78,22 @@ DLL void* init(void* self)
 	text_Small.set_High_Light_Color(sf::Color(0x666666FF));
 	text_Small.set_Text(L"¼õÉÙ×ÖºÅ");
 
+	text_Save_Image.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
+	text_Save_Image.set_Position((float)(1920 - 50), (float)(1080 - 300));
+	text_Save_Image.set_Alignment(Button_Text::Alignment::Right); //ÓÒ¶ÔÆë
+	text_Save_Image.set_Default_Color(sf::Color(0x000000FF));
+	text_Save_Image.set_High_Light_Color(sf::Color(0x666666FF));
+	text_Save_Image.set_Text(L"±£´æÍ¼Æ¬");
+
 	text_Save.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Save.set_Position((float)(1920 - 50), (float)(1080 - 300));
+	text_Save.set_Position((float)(1920 - 50), (float)(1080 - 350));
 	text_Save.set_Alignment(Button_Text::Alignment::Right); //ÓÒ¶ÔÆë
 	text_Save.set_Default_Color(sf::Color(0x000000FF));
 	text_Save.set_High_Light_Color(sf::Color(0x666666FF));
-	text_Save.set_Text(L"±£´æÍ¼Æ¬");
+	text_Save.set_Text(L"±£´æÅÅÁÐ");
 
 	text_Mode.get_Text().setFillColor(sf::Color(0xFFFFFFFF));
-	text_Mode.set_Position((float)(1920 - 50), (float)(1080 - 350));
+	text_Mode.set_Position((float)(1920 - 50), (float)(1080 - 400));
 	text_Mode.set_Alignment(Button_Text::Alignment::Right); //ÓÒ¶ÔÆë
 	text_Mode.set_Default_Color(sf::Color(0x000000FF));
 	text_Mode.set_High_Light_Color(sf::Color(0x666666FF));
@@ -98,16 +108,19 @@ DLL void* init(void* self)
 
 	printf("line::init: set initing\n");
 	set.setLineNumber(3);
-	set.add(L"0", 3);
-	set.add(L"8", 3);
-	set.add(L"1", 2);
-	set.add(L"3", 1);
-	set.add(L"2", 2);
-	set.add(L"4", 2);
-	set.add(L"5", 2);
-	set.add(L"6", 2);
-	set.add(L"7", 2);
-	set.build();
+	//set.add(L"ÖÐÎÄ²âÊÔ", 3); //0
+	//set.add(L"8", 3);
+	//set.add(L"1", 2);
+	//set.add(L"3", 1);
+	//set.add(L"2", 2);
+	//set.add(L"4", 2);
+	//set.add(L"5", 2);
+	//set.add(L"6", 2);
+	//set.add(L"7", 2);
+	//set.build();
+	
+	set.load(".\\resources\\line\\line.txt");
+	
 	//set.rand();
 	printf("line::init: set randed\n");
 	
@@ -177,11 +190,26 @@ DLL void* draw(void* null)
 	texture->draw(text_Auto);
 	texture->draw(text_Big);
 	texture->draw(text_Small);
+	texture->draw(text_Save_Image);
 	texture->draw(text_Save);
 	texture->draw(text_Mode);
 	texture->draw(elementSet);
 	//for (unsigned char i = 0; i < 3; i++) texture->draw(test[i]);
 	return nullptr;
+}
+
+void load()
+{
+	printf("line::load: loading\n");
+	set.load(".\\resources\\line\\line.txt");
+	elementSet.load(set);
+}
+
+void save()
+{
+	printf("line::load: saving\n");
+	set.save(".\\resources\\line\\line.txt");
+	elementSet.load(set);
 }
 
 void ened()
@@ -220,6 +248,7 @@ void event_Mouse(sf::Event::MouseMoveEvent mouse)
 	text_Auto.set_High_Light(text_Auto.is_Clicked(mouse_f) ^ autoRanding);
 	text_Big.set_High_Light(text_Big.is_Clicked(mouse_f));
 	text_Small.set_High_Light(text_Small.is_Clicked(mouse_f));
+	text_Save_Image.set_High_Light(text_Save_Image.is_Clicked(mouse_f));
 	text_Save.set_High_Light(text_Save.is_Clicked(mouse_f));
 	text_Mode.set_High_Light(text_Mode.is_Clicked(mouse_f));
 }
@@ -262,7 +291,7 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 		printf("Set::event: auto randing is %s\n", autoRanding ? "open" : "close");
 	}
 
-	if (text_Save.is_Clicked(mouse_f))
+	if (text_Save_Image.is_Clicked(mouse_f))
 	{
 		sf::RenderTexture save;
 		sf::Sprite sprite;
@@ -270,6 +299,12 @@ void event_Mouse(sf::Event::MouseButtonEvent mouse)
 		save.create(1920, 1080);
 		save.draw(sprite);
 		save.getTexture().copyToImage().saveToFile(".\\resources\\line\\line.png");
+		printf("Set::event: save image\n");
+	}
+
+	if (text_Save.is_Clicked(mouse_f))
+	{
+		set.save(".\\resources\\line\\line.txt");
 		printf("Set::event: save\n");
 	}
 

@@ -1,4 +1,5 @@
 #include "set.h"
+#include "deconstructer.h"
 
 //Coordinates
 
@@ -283,6 +284,31 @@ Point& Line::operator[](unsigned char index)
 	return *target;
 }
 
+File& operator<<(File& stream, Line& line)
+{
+	constexpr wchar_t space = L' ';
+	constexpr wchar_t endl = L'\n';
+	Point* point = line.head.getNext();
+	while (point != nullptr)
+	{
+		stream << point->getWeight() << space << point->getName() << endl;
+		point = point->getNext();
+	}
+	return stream;
+}
+
+//std::wifstream& operator>>(std::wifstream& stream, Line& line)
+//{
+//	int weight = 0;
+//	std::wstring name;
+//
+//	stream >> weight;
+//	stream >> name;
+//
+//	line.add(name, (unsigned char)weight);
+//	return stream;
+//}
+
 void Line::exchanged(char deltaNumber)
 {
 	number += deltaNumber;
@@ -380,6 +406,66 @@ void Set::build()
 
 	if (!checkBalance()) balance();
 	printf("Set::build: build finish\n");
+}
+
+void Set::load(const char path[])
+{
+	wchar_t inputs[10] = L"";
+	unsigned short input = 0;
+	unsigned char* points = 0;
+	Deconstructer deconstructPoints{ [&points]()->void {delete[] points; } };
+
+	File file;
+	file.open(path);
+
+	file.ignore(2);//UTF16的字节序
+	
+	//读取总行数
+	file.getline(inputs, 10, L' ');
+	setLineNumber((unsigned char)_wtoi(inputs));
+
+	//读取各行数
+	points = new unsigned char[lineNumber];
+	for (unsigned char i = 0; i < lineNumber; i++)
+	{
+		file.getline(inputs, 10, L' ');
+		points[i] = (unsigned char)_wtoi(inputs);
+	}
+
+	//读取各行
+	unsigned char weight = 0;
+	std::wstring name;
+	for (unsigned char i = 0; i < lineNumber; i++)
+	{
+		lines[i].clear(); //非必要，但冗余
+		for (unsigned char j = 0; j < points[i]; j++)
+		{
+			file.getline(inputs, 10, L' ');
+			weight = (unsigned char)_wtoi(inputs);
+			file.getline(inputs, 10, L'\n');
+			name = inputs;
+
+			lines[i].add(name, weight);
+		}
+	}
+
+	file.close();
+}
+
+void Set::save(const char path[])
+{
+	constexpr wchar_t space = L' ';
+	constexpr wchar_t endl = L'\n';
+	File file;
+	file.open(path);
+	file.addBE();
+	file << lineNumber << space;
+	for (unsigned char i = 0; i < lineNumber; i++)
+		file << lines[i].getNumber() << space;
+	file << endl;
+	for (unsigned char i = 0; i < lineNumber; i++)
+		file << lines[i] << endl;
+	file.close();
 }
 
 unsigned short Set::rand(RandRisist randRisist, unsigned short maxTimes)

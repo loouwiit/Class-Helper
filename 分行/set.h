@@ -1,5 +1,6 @@
 #include "Button.h"
-#include "deconstructer.h"
+#include "file.h"
+#include <fstream>
 
 constexpr unsigned char CooridinateAllocateStep = 4;
 constexpr unsigned char LineBufferAllocateStep = 8;
@@ -99,6 +100,9 @@ public:
 
 	Point& operator[](unsigned char index);
 
+	friend File& operator<<(File& stream, Line& line);
+	//friend std::wifstream& operator>>(std::wifstream& stream, Line& line);
+
 protected:
 	void exchanged(char deltaNumber);
 
@@ -138,6 +142,10 @@ public:
 	void setPointReserverNumber(unsigned char number);
 	void add(std::wstring name, unsigned char weight = 1);
 	void build();
+
+	void load(const char path[]);
+	void save(const char path[]);
+
 	unsigned short rand(RandRisist randRisist, unsigned short maxTimes = RandMaxTime);
 	void debug();
 
