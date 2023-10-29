@@ -731,8 +731,7 @@ bool Set::checkRand(RandRisist randRisist)
 			nowPosition = 0; //位置归零
 			nextPosition = 0;
 			Line& line = lines[i];
-			//[optimize][优化]
-			//此处可以用Point*逐个查找，提升性能
+
 			Point* point = &line[0];
 			for (unsigned char j = 0; j < linePointNumber; j++)
 			{
