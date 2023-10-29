@@ -195,7 +195,7 @@ protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
 private:
-	unsigned char elementNumber = 0;
+	unsigned short elementNumber = 0;
 	Element* elements = nullptr;
 	sf::Transformable transform;
 };

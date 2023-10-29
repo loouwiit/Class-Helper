@@ -267,7 +267,7 @@ void Line::debug()
 	Point* point = head.getNext();
 	for (unsigned char i = 0; i < number; i++)
 	{
-		printf(" (%d,\"%s\")", point->getWeight(), (const char*)point->getName().c_str());
+		wprintf(L" (%d,\"%s\")", point->getWeight(), point->getName().c_str());
 		point = point->getNext();
 	}
 	//printf("Line::debug: finish\n");

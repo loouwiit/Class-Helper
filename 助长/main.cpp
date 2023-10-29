@@ -53,6 +53,8 @@ int MAIN
 
 void init()
 {
+	setlocale(LC_ALL, "chs");
+
 	if (!font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttc")) font.loadFromFile("C:\\Windows\\Fonts\\msyh.ttf");
 	window.create(sf::VideoMode(1280, 720), window_Name);
 	view.setSize(1920, 1080);
